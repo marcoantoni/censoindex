@@ -18,10 +18,10 @@
   ]) !!} 
     <div class="form-group">
       <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <div class="input-group-text">@</div>
-        </div>
         <input type="text" name="search" id="search" class="form-control" placeholder="Digite sua pergunta">
+        <div class="input-group-prepend">
+          <div class="input-group-text">?</div>
+        </div>
       </div>
     </div>
     <div class="text-center">

@@ -14,10 +14,10 @@
   ]) !!} 
     <div class="form-group">
       <div class="input-group">
+        <input type="text" name="search" id="search" class="form-control" value="{{ $sentence }}">
         <div class="input-group-prepend">
-          <div class="input-group-text">@</div>
+          <div class="input-group-text">?</div>
         </div>
-        <input type="text" name="search" id="search" class="form-control" placeholder="{{ $sentence }}">
         <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Pesquisa</button>
       </div>
     </div>
@@ -57,7 +57,4 @@
       </div>
     </div>
   </div>
-  <!-- JS code -->
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 @endsection
