@@ -12,9 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Order extends Branch {
 
     function handle(DecisionTree $tree, Closure $next): DecisionTree {
-        print(" Chegou em School/Order");
-    
-        
+       
         if (array_intersect($tree->getTokens(), ['desc','decrescente','inverso'])) {
             $tree->setOrder(['column' => 'NO_ENTIDADE', 'order' => 'DESC']);        
         } else {

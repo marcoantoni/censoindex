@@ -17,18 +17,29 @@ class School extends Branch {
 
     function handle(DecisionTree $tree, Closure $next): DecisionTree {
 
-        if (array_intersect($tree->getTokens(), ['escola','colegio','instituto'])){
-                      
+        $find = ['escola','colegio','instituto'];
+        $found = $this->array_search($find, $tree->getTokens() );
+        
+        if ($found == 0 || $found == 1) {
             return app(Pipeline::class)
                 ->send($tree)
                 ->through([
                     Type::class,
                     Order::class
                 ])->thenReturn();
-
         } else {
-            print("Nao tem escolas ");
+            print("Nao tem escolas nos dois primeiros tokens ");
             return $next($tree);
         }
+   }
+
+    public function array_search(array $needle , array $haystack) {
+        
+        foreach ($needle as $key => $value) {
+            $found = array_search ($value, $haystack);
+            if ($found >= 0)
+                return $found;
+        }
+        return false;
     }
 }
