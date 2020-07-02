@@ -13,3 +13,7 @@
 
 
 Route::resource('search', 'SearchController');
+
+Route::get('/', function () {
+    return view('search');
+});
