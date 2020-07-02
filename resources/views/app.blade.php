@@ -1,107 +1,97 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="pt-br">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-    <title>@yield('title')</title>
-    <!-- CSS  -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="https://materializecss.com/dist/css/materialize.min.css"  media="screen,projection"/>
-    <link href="https://materializecss.com/templates/starter-template/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.0.1">
+    <title>Pricing example · Bootstrap</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.5/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+   
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" href="/docs/4.5/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" href="/docs/4.5/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/docs/4.5/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+    <link rel="manifest" href="/docs/4.5/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/4.5/assets/img/favicons/safari-pinned-tab.svg" color="#563d7c">
+    <link rel="icon" href="/docs/4.5/assets/img/favicons/favicon.ico">
+    <meta name="msapplication-config" content="/docs/4.5/assets/img/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#563d7c">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+
     <style>
-      body {
-        display: flex;
-        min-height: 100vh;
-        flex-direction: column;
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
       }
-      main {
-        flex: 1 0 auto;
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
       }
     </style>
+    <!-- Custom styles for this template -->
+    <link href="https://getbootstrap.com/docs/4.5/examples/pricing/pricing.css" rel="stylesheet">
   </head>
   <body>
-    <header>
-      <!-- Dropdown Structure -->
-      <ul id="dropdown1" class="dropdown-content">
-        <li><a href="#!">one</a></li>
-        <li><a href="#!">two</a></li>
-        <li class="divider"></li>
-        <li><a href="#!">three</a></li>
-      </ul>
-      <nav class="light-blue lighten-1" role="navigation">
-        <div class="nav-wrapper container">
-          <!-- <a href="#!" class="brand-logo">Logo</a>-->
-          <ul class="left hide-on-med-and-down">
-            <li><a href="#">Sobre</a></li>
-            <li><a href="#">Origem dos dados</a></li>
-            <li><a href="#">Ajuda</a></li>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+  <h5 class="my-0 mr-md-auto font-weight-normal">Company name</h5>
+  <nav class="my-2 my-md-0 mr-md-3">
+    <a class="p-2 text-dark" href="#">Features</a>
+    <a class="p-2 text-dark" href="#">Enterprise</a>
+    <a class="p-2 text-dark" href="#">Support</a>
+    <a class="p-2 text-dark" href="#">Pricing</a>
+  </nav>
+  <a class="btn btn-outline-primary" href="#">Sign up</a>
+</div>
+<div class="container">
+  <main>
+    @yield('content')
+  </main>  
+    <footer class="pt-4 my-md-5 pt-md-5 border-top">
+      <div class="row">
+        <div class="col-12 col-md">
+          <img class="mb-2" src="/docs/4.5/assets/brand/bootstrap-solid.svg" alt="" width="24" height="24">
+          <small class="d-block mb-3 text-muted">&copy; 2017-2020</small>
+        </div>
+        <div class="col-6 col-md">
+          <h5>Features</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="text-muted" href="#">Cool stuff</a></li>
+            <li><a class="text-muted" href="#">Random feature</a></li>
+            <li><a class="text-muted" href="#">Team feature</a></li>
+            <li><a class="text-muted" href="#">Stuff for developers</a></li>
+            <li><a class="text-muted" href="#">Another one</a></li>
+            <li><a class="text-muted" href="#">Last time</a></li>
           </ul>
         </div>
-      </nav>
-    </header>
-
-
-    <!--<div class="section no-pad-bot" id="index-banner">
-    <div class="container">
-    <br><br>
-    <h1 class="header center orange-text">Starter Template</h1>
-    <div class="row center">
-    <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
-    </div>
-    <div class="row center">
-    <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light orange">Get Started</a>
-    </div>
-    <br><br>
-
-    </div>
-    </div>-->
-
-
-    <main class="container">
-      <div class="section">
-      @yield('content')
-      </div>
-      <br><br>
-    </main>
-
-    <footer class="page-footer light-blue">
-      <div class="container">
-        <div class="row">
-          <div class="col l6 s12">
-            <h5 class="white-text">O que é o FUNDEB?</h5>
-            <p class="grey-text text-lighten-4">O Fundo de Manutenção e Desenvolvimento da Educação Básica e de Valorização dos Profissionais da Educação (Fundeb) atende toda a educação básica, da creche ao ensino médio. Substituto do Fundo de Manutenção e Desenvolvimento do Ensino Fundamental e de Valorização do Magistério (Fundef), que vigorou de 1997 a 2006, o Fundeb está em vigor desde janeiro de 2007 e se estenderá até 2020.</p>
-            <a class="white-text" href="http://portal.mec.gov.br/fundeb">Para mais detalhes</a></li>
-          </div>
-          <div class="col l3 s12">
-            <h5 class="white-text">Origem dos dados</h5>
-            <ul>
-            <li><a class="white-text" href="https://www.fnde.gov.br/index.php/financiamento/fundeb/area-para-gestores/dados-estatisticos">Dados estatistícos</a></li>
-            <li><a class="white-text" href="#!">Link 3</a></li>
-            <li><a class="white-text" href="#!">Link 4</a></li>
-            </ul>
-          </div>
-          <div class="col l3 s12">
-            <h5 class="white-text">Contribua</h5>
-            <ul>
-              <li><a class="white-text" href="https://github.com/marcoantoni/fundeb/">GitHub</a></li>
-            </ul>
-          </div>
+        <div class="col-6 col-md">
+          <h5>Resources</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="text-muted" href="#">Resource</a></li>
+            <li><a class="text-muted" href="#">Resource name</a></li>
+            <li><a class="text-muted" href="#">Another resource</a></li>
+            <li><a class="text-muted" href="#">Final resource</a></li>
+          </ul>
         </div>
-      </div>
-      <div class="footer-copyright">
-        <div class="container">
-          Made by <a class="orange-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+        <div class="col-6 col-md">
+          <h5>About</h5>
+          <ul class="list-unstyled text-small">
+            <li><a class="text-muted" href="#">Team</a></li>
+            <li><a class="text-muted" href="#">Locations</a></li>
+            <li><a class="text-muted" href="#">Privacy</a></li>
+            <li><a class="text-muted" href="#">Terms</a></li>
+          </ul>
         </div>
       </div>
     </footer>
-    <!--  Scripts-->
-    <script type="text/javascript" src="https://materializecss.com/bin/materialize.js"></script>
-    <script src="js/init.js"></script>
-    <script>
-      $(document).ready(function() {
-        $(".dropdown-trigger").dropdown();
-      });
-    </script>
-  </body>
+  </div>
+</body>
 </html>

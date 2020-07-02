@@ -7,19 +7,29 @@
   <p>This is appended to the master sidebar.</p>
 @endsection
 
-@section('content')
-<br><br><br><br><br>
-{!! Form::open([
-  'route' => 'search.store',
-  'class' => 'row'
-]) !!}  
-    
-  <div class="input-field col s8">
-    <input id="search" type="text" class="" name="search">
-    <label class="active" for="first_name2">Digite sua pergunta</label>
-    <input type="submit" name="">
+@section('content')  
+  <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Pricing</h1>
+    <p class="lead">Faça uma pergunta referente aos dados educacionais que tentaremos responder</p>
   </div>
-  
-{{ Form::close() }}
-
+    {!! Form::open([
+      'route' => 'search.store',
+      'class' => 'col s12'
+    ]) !!} 
+      <div class="form-group">
+        <!--<label for="exampleInputEmail1">Email address</label>
+        <input type="text" class="form-control" id="search" name="search">
+        <label class="sr-only" for="inlineFormInputGroup">Username</label>-->
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">@</div>
+          </div>
+          <input type="text" name="search" id="search" class="form-control" placeholder="Digite sua pergunta">
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Pesquisa</button>
+        <button class="btn btn-secondary">Debug</button>
+      </div>
+    {{ Form::close() }}
 @endsection
