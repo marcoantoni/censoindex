@@ -20,7 +20,7 @@ class School extends Branch {
         $find = ['escola','colegio','instituto'];
         $found = $this->array_search($find, $tree->getTokens() );
         
-        if ($found == 0 || $found == 1) {
+        if ($found >= 0) {
             return app(Pipeline::class)
                 ->send($tree)
                 ->through([
@@ -28,7 +28,6 @@ class School extends Branch {
                     Order::class
                 ])->thenReturn();
         } else {
-            print("Nao tem escolas nos dois primeiros tokens ");
             return $next($tree);
         }
    }

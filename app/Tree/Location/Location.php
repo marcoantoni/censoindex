@@ -30,9 +30,7 @@ class Location extends Branch {
                 } else {
                     $city = $entityName;
                 }
-            } else {
-                print('nao tem localidade');
-            }
+            } 
         }
 
        // if (!$city) {

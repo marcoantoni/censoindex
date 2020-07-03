@@ -23,20 +23,24 @@
     </div>
   {{ Form::close() }}
   
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Escola</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach ($escolas as $escola)
+  @if ($responseType == 2)
+    <table class="table table-striped">
+      <thead>
         <tr>
-          <td>{{ $escola->NO_ENTIDADE }}</td>
-        </tr>     
-      @endforeach
-    </tbody>
-  </table>
+          <th>Escola</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach ($escolas as $escola)
+          <tr>
+            <td>{{ $escola->NO_ENTIDADE }}</td>
+          </tr>     
+        @endforeach
+      </tbody>
+    </table>
+  @else
+    <h1>{{ $escolas }}</h1>
+  @endif
 
   <!-- Modal -->
   <div class="modal fade" id="modalDebug" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

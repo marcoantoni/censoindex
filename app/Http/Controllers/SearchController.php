@@ -49,7 +49,8 @@ class SearchController extends Controller {
         return view ('response')->with([
             'escolas'   => $decision_tree->response,
             'sentence'  => $decision_tree->sentence,
-            'debug'     => $analyse
+            'debug'     => $analyse,
+            'responseType' => $decision_tree->responseType
         ]);
     }
 

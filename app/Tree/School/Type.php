@@ -68,7 +68,7 @@ class Type extends Branch {
 			}
 
 	        $condition = array(
-	           'field' => 'TP_DEPENDENCIA',
+	           	'field' => 'TP_DEPENDENCIA',
 	            'operator' => $operator,
 	            'value' => $typeSchol
 	        );

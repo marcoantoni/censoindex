@@ -49,6 +49,7 @@ class DecisionTree {
     public $response;
     public $sentence;
     private $tokens;
+    public $responseType;
 
     protected function normalizeSentence(string $sentence): string {
         $sentence = trim(preg_replace('/\s+/',' ',$sentence));
@@ -78,8 +79,15 @@ class DecisionTree {
             $query = $query->where($condition['field'], $condition['operator'], $condition['value']);
         }
 
-        $this->response = $query->orderBy($this->orderBy['column'], $this->orderBy['order'])->get();
-
+        $query->orderBy($this->orderBy['column'], $this->orderBy['order']);
+       
+        if ($this->tokens[0] == 'quantidade' || $this->tokens[0] == 'quantos' || $this->tokens[0] == 'quantas') {
+            $this->responseType = 1;
+            $this->response = $query->count();
+        } else {
+            $this->responseType = 2;
+            $this->response = $query->get();
+        }
     }
 
     public function analyze() {
