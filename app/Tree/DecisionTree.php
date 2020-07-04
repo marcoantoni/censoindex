@@ -10,8 +10,6 @@ use App\Tree\Location\Location;
 use App\Tree\School\School;
 use Cache;
 use DB;
-use Google\ApiCore\ApiException;
-use Google\ApiCore\ValidationException;
 use Google\Cloud\Language\LanguageClient;
 use Google\Cloud\Language\V1\AnnotateTextRequest\Features;
 use Google\Cloud\Language\V1\AnnotateTextResponse;
@@ -36,8 +34,7 @@ use Google\Cloud\Language\V1\PartOfSpeech\Tense;
 use Google\Cloud\Language\V1\PartOfSpeech\Voice;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pipeline\Pipeline;
-use Illuminate\Support\Collection;
-use Log;
+use Session;
 
 class DecisionTree {
 
@@ -50,6 +47,7 @@ class DecisionTree {
     public $sentence;
     private $tokens;
     public $responseType;
+    public $userMessage = [];
 
     protected function normalizeSentence(string $sentence): string {
         $sentence = trim(preg_replace('/\s+/',' ',$sentence));
@@ -58,7 +56,6 @@ class DecisionTree {
     }
 
     public function __construct(string $sentence) {
-        Log::notice("Question: $sentence");
         $this->sentence = $this->normalizeSentence($sentence);
         $this->tokens = array();
         $this->conditions = array();
@@ -81,13 +78,21 @@ class DecisionTree {
 
         $query->orderBy($this->orderBy['column'], $this->orderBy['order']);
        
-        if ($this->tokens[0] == 'quantidade' || $this->tokens[0] == 'quantos' || $this->tokens[0] == 'quantas') {
+        // radical that indicates quantity
+        if (preg_match('/quant/', $this->sentence)) {
             $this->responseType = 1;
             $this->response = $query->count();
         } else {
             $this->responseType = 2;
             $this->response = $query->get();
+            $count = $this->response->count();
+            if ($count > 100) {
+                Session::flash('warning', 'Sua pesquisa retornou mais que 100 resultados!');
+            } else if ($count == 0) {
+                Session::flash('error', 'Sua pesquisa não retornou nenhum resultado. Tente reescrever a pergunta de outro jeito. Não se esqueça que o nome da cidade e a UF devem iniciar com letras maiúsculas como em <b>Porto Alegre/RS</b>');
+            }
         }
+
     }
 
     public function analyze() {
@@ -110,6 +115,7 @@ class DecisionTree {
         
         $debug .= 'ENTITIES<br>';
         $this->entityies = $this->annotation->getEntities();
+        
         foreach ($this->entityies as $entity) {
             $debug .= sprintf('Name: %s <br>', $entity->getName());
             $debug .= sprintf('Type: %s <br>', EntityType::name($entity->getType()));

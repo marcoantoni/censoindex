@@ -29,4 +29,5 @@
       <button type="submit" class="btn btn-primary">Pesquisa</button>
     </div>
   {{ Form::close() }}
+  <img src="{{ url('images/school.png') }}" style="width: 75px; height: 75px;" title='Tente perguntar "quais escolas tem em Erechim/RS"'>
 @endsection

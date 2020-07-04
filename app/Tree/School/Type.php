@@ -29,10 +29,10 @@ class Type extends Branch {
 		if ($hasToken) {
 
 			foreach ($tokens as $token => $value) {
-				if ($value == 'publico' || $value == 'publicas') {
+				if (preg_match('/public/', $value)) {
 					$typeSchol = 0;
 					break;
-				} elseif ($value == 'privado' || $value == 'particular') {
+				} elseif (preg_match('/privad|particular/', $value))  {
 					$typeSchol = '0';
 					$operator = '<>';
 					break;
@@ -49,19 +49,18 @@ class Type extends Branch {
 	    }
 
 	    // search for public schools:
-
 	    $hasToken = array_intersect($tree->getTokens(), ['municipal', 'municipio ', 'estadual', 'estado', 'federal']); 
 
 		if ($hasToken) {
 			$operator = '=';
 			foreach ($tokens as $token => $value) {
-				if ($value == 'municipal' || $value == 'municipio') {
+				if (preg_match('/municip/', $value)) {
 					$typeSchol = 3;
 					break;
-				} elseif ($value == 'estadual' || $value == 'estado') {
+				} elseif (preg_match('/estad/', $value)) {
 					$typeSchol = '2';
 					break;
-				} elseif ($value == 'federal') {
+				} elseif (preg_match('/federal/', $value)) {
 					$typeSchol = '1';
 					break;
 				}
