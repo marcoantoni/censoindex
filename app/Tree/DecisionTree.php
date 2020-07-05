@@ -6,7 +6,7 @@ namespace App\Tree;
 
 use App\Decorators\Token;
 use App\Escola;
-use App\Tree\Location\Location;
+use App\Tree\Location;
 use App\Tree\School\School;
 use Cache;
 use DB;
@@ -87,7 +87,7 @@ class DecisionTree {
             $this->response = $query->get();
             $count = $this->response->count();
             if ($count > 100) {
-                Session::flash('warning', 'Sua pesquisa retornou mais que 100 resultados!');
+                Session::flash('warning', 'Sua pesquisa retornou '. $count . ' resultados!');
             } else if ($count == 0) {
                 Session::flash('error', 'Sua pesquisa não retornou nenhum resultado. Tente reescrever a pergunta de outro jeito. Não se esqueça que o nome da cidade e a UF devem iniciar com letras maiúsculas como em <b>Porto Alegre/RS</b>');
             }

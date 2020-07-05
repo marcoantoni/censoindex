@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Tree\Location;
+namespace App\Tree;
 
 use App\Decorators\Token;
 use App\Tree\Answer;
@@ -12,13 +12,14 @@ use Google\Cloud\Language\V1\DependencyEdge\Label;
 use Google\Cloud\Language\V1\Entity\Type as EntityType;
 
 use App\Municipio;
+use App\UF;
 
 class Location extends Branch {
 
     function handle(DecisionTree $tree, Closure $next): DecisionTree {
      
-        $city = '';
-        $uf = '';
+        $city = null;
+        $uf = null;
         $condition = [];
 
         foreach ($tree->getEntityies() as $entity) {
@@ -32,24 +33,28 @@ class Location extends Branch {
                 }
             } 
         }
+        // if not found a city is looking for a state
+        if ($city == null) {            
+            $reseultSet = UF::where('NO_UF', '=', $uf)->first();
+            
+            $condition = array(
+               'field' => 'CO_UF',
+                'operator' => '=',
+                'value' => $reseultSet['co_uf']
+            );
+        // found a city
+        } else {
+            $reseultSet = Municipio::where([
+                ['nome', '=', $city],
+                ['uf', '=', $uf]
+            ])->first();
 
-       // if (!$city) {
-        //    print('Não encontrou uma cidade');
-       // }
-
-        $reseultSet = Municipio::where([
-            ['nome', '=', $city],
-            ['uf', '=', $uf]
-        ])->first();
-      
-        //print ('<br>Cidade=' . $city .' RS: ' . $uf);
-        //print('<br>Municipio id: ' . $reseultSet['id']);
-      
-        $condition = array(
-           'field' => 'CO_MUNICIPIO',
-            'operator' => '=',
-            'value' => $reseultSet['id']
-        );
+            $condition = array(
+               'field' => 'CO_MUNICIPIO',
+                'operator' => '=',
+                'value' => $reseultSet['id']
+            );
+        }
 
         $tree->addCondition($condition);  
 
