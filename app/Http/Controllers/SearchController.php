@@ -38,7 +38,7 @@ use App\Tree\DecisionTree;
 class SearchController extends Controller {
 
     public function index(){
-        return view ('search');
+        return view('search')->with(['pagetitle' => 'CensoIndex']);
     }
     
     public function store(Request $request) {
@@ -50,7 +50,8 @@ class SearchController extends Controller {
             'escolas'   => $decision_tree->response,
             'sentence'  => $decision_tree->sentence,
             'debug'     => $analyse,
-            'responseType' => $decision_tree->responseType
+            'responseType' => $decision_tree->responseType,
+            'pagetitle' => 'CensoIndex - Resposta da pergunta'
         ]);
     }
 
