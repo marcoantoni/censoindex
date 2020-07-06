@@ -5,8 +5,8 @@ from mysql.connector import Error
 
 connection = mysql.connector.connect(
   host="localhost",
-  user="USER",
-  passwd="PASS",
+  user="debian-sys-maint",
+  passwd="HwearQMC4nkPeYmP",
   database="censoindex"
 )
 
