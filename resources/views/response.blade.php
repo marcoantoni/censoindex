@@ -1,12 +1,5 @@
 @extends('app')
 
-@section('title', 'Resposta')
-
-@section('sidebar')
-@parent
-  <p>This is appended to the master sidebar.</p>
-@endsection
-
 @section('content')
   {!! Form::open([
     'route' => 'search.store',
@@ -14,11 +7,11 @@
   ]) !!} 
     <div class="form-group">
       <div class="input-group">
-        <input type="text" name="search" id="search" class="form-control" value="{{ $sentence }}">
+        <input type="text" name="search" id="search" class="form-control" value="{{ $sentence }}" required>
         <div class="input-group-prepend">
           <div class="input-group-text">?</div>
         </div>
-        <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Pesquisa</button>
+        <button type="submit" class="btn btn-primary" style="margin-left: 10px;" onclick="modal();">Pesquisa</button>
       </div>
     </div>
   {{ Form::close() }}
