@@ -6,7 +6,6 @@ use App\Decorators\Token;
 use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
 
 class Type extends Branch {
 	
@@ -30,10 +29,10 @@ class Type extends Branch {
 
 			foreach ($tokens as $token => $value) {
 				if (preg_match('/public/', $value)) {
-					$typeSchol = 0;
+					$typeSchol = self::PUBLICSCHOOL;
 					break;
 				} elseif (preg_match('/privad|particular/', $value))  {
-					$typeSchol = '0';
+					$typeSchol = self::PUBLICSCHOOL;
 					$operator = '<>';
 					break;
 				}
@@ -58,10 +57,10 @@ class Type extends Branch {
 					$typeSchol = 3;
 					break;
 				} elseif (preg_match('/estad/', $value)) {
-					$typeSchol = '2';
+					$typeSchol = 2;
 					break;
 				} elseif (preg_match('/federal/', $value)) {
-					$typeSchol = '1';
+					$typeSchol = 1;
 					break;
 				}
 			}

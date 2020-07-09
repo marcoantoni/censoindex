@@ -1,19 +1,14 @@
 <?php
 
-
 namespace App\Tree;
 
-use App\Decorators\Token;
-use App\Tree\Answer;
 use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use Closure;
-use Google\Cloud\Language\V1\DependencyEdge\Label;
 use Google\Cloud\Language\V1\Entity\Type as EntityType;
-
 use App\Municipio;
 use App\UF;
-use DB;
+
 
 class Location extends Branch {
 
@@ -24,7 +19,7 @@ class Location extends Branch {
         $condition = [];
 
         foreach ($tree->getEntityies() as $entity) {
-           if ($entity->getType() == EntityType::LOCATION) {
+           if ($entity->getType() == EntityType::LOCATION || $entity->getType() == EntityType::OTHER) {
                 $entityName = $entity->getName();
                               
                 if (strlen($entityName) == 2){

@@ -2,11 +2,9 @@
 
 namespace App\Tree\School;
 
-use App\Decorators\Token;
 use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
 
 class TypeSchool extends Branch {
 	
@@ -30,10 +28,10 @@ class TypeSchool extends Branch {
 
 			foreach ($tokens as $token => $value) {
 				if ($value == 'publico' || $value == 'publicas') {
-					$typeSchol = 0;
+					$typeSchol = self::PUBLICSCHOOL;
 					break;
 				} elseif ($value == 'privado' || $value == 'particular') {
-					$typeSchol = '0';
+					$typeSchol = self::PRIVATECSCHOOL;
 					$operator = '<>';
 					break;
 				}

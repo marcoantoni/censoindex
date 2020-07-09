@@ -1,17 +1,12 @@
 <?php
 
-
 namespace App\Tree\School;
 
-use App\Decorators\Token;
-use App\Escola;
-use App\Tree\Answer;
 use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use Closure;
-use Google\Cloud\Language\V1\DependencyEdge\Label;
+use App\Escola;
 use Illuminate\Pipeline\Pipeline;
-
 
 class School extends Branch {
 
@@ -21,6 +16,7 @@ class School extends Branch {
         $found = $this->array_search($find, $tree->getTokens() );
         
         if ($found >= 0) {
+            $tree->query = Escola::query();
             return app(Pipeline::class)
                 ->send($tree)
                 ->through([

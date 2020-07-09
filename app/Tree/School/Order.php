@@ -1,13 +1,10 @@
 <?php
 
-
 namespace App\Tree\School;
 
-use App\Decorators\Token;
 use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
 
 class Order extends Branch {
 

@@ -1,15 +1,12 @@
 <?php
 
-
 namespace App\Tree;
 
-use App\Decorators\Token;
 use App\Escola;
 use App\Matricula;
 use App\Tree\Location;
 use App\Tree\School\School;
 use App\Tree\Student\Student;
-use Cache;
 use Google\Cloud\Language\LanguageClient;
 use Google\Cloud\Language\V1\AnnotateTextRequest\Features;
 use Google\Cloud\Language\V1\AnnotateTextResponse;
@@ -20,23 +17,16 @@ use Google\Cloud\Language\V1\Entity\Type as EntityType;
 use Google\Cloud\Language\V1\EntityMention;
 use Google\Cloud\Language\V1\EntityMention\Type as MentionType;
 use Google\Cloud\Language\V1\LanguageServiceClient;
-use Google\Cloud\Language\V1\PartOfSpeech\Aspect;
-use Google\Cloud\Language\V1\PartOfSpeech\Form;
 use Google\Cloud\Language\V1\PartOfSpeech\Gender;
-use Google\Cloud\Language\V1\PartOfSpeech\Mood;
-use Google\Cloud\Language\V1\PartOfSpeech\Number;
-use Google\Cloud\Language\V1\PartOfSpeech\PBCase;
-use Google\Cloud\Language\V1\PartOfSpeech\Person;
-use Google\Cloud\Language\V1\PartOfSpeech\Proper;
-use Google\Cloud\Language\V1\PartOfSpeech\Reciprocity;
 use Google\Cloud\Language\V1\PartOfSpeech\Tag;
-use Google\Cloud\Language\V1\PartOfSpeech\Tense;
-use Google\Cloud\Language\V1\PartOfSpeech\Voice;
-use Illuminate\Database\Eloquent\Builder;
+use Google\Cloud\Language\V1\PartOfSpeech\Person;
 use Illuminate\Pipeline\Pipeline;
 use Session;
 
 class DecisionTree {
+    public const NUMBER = 1;
+    public const LIST = 2;
+
     private $annotation;
     private $conditions = [];
     private $entityies;
@@ -82,11 +72,11 @@ class DecisionTree {
         // shows the answer to the user, which can be list or numeric
         // if contains the radical "quant" the answer is numeric
 
-        if (preg_match('/quant/', $this->sentence)) {
-            $this->responseType = 1;
+        if (preg_match('/quant/', $this->tokens[0])) {
+            $this->responseType = self::NUMBER;
             $this->response = $this->query->count();
         } else {
-            $this->responseType = 2;
+            $this->responseType = self::LIST;
             // sorting only with list
             $this->query->orderBy($this->orderBy['column'], $this->orderBy['order']);
             $this->response = $this->query->get();
@@ -120,7 +110,7 @@ class DecisionTree {
         ]);
 
         // Create a new Document, add text as content and set type to PLAIN_TEXT
-        $document = (new Document())->setContent(strtoupper($this->sentence))->setType(Type::PLAIN_TEXT);
+        $document = (new Document())->setContent($this->sentence)->setType(Type::PLAIN_TEXT);
 
         $features = (new Features())->setExtractEntities(true)->setExtractSyntax(true);
 
@@ -155,17 +145,8 @@ class DecisionTree {
             $debug .= sprintf('Token dependency edge: %s <br>' , $token->getDependencyEdge()->serializeToJsonString());
             $debug .= sprintf('Token lemma: %s <br>' , $token->getLemma());
             $this->tokens[] = $token->getLemma();
-            $debug .= sprintf('Token aspect: %s <br>' , Aspect::name($token->getPartOfSpeech()->getAspect()));
-            $debug .= sprintf('Token case: %s <br>' , PBCase::name($token->getPartOfSpeech()->getCase()));
-            $debug .= sprintf('Token form: %s <br>' , Form::name($token->getPartOfSpeech()->getForm()));
             $debug .= sprintf('Token gender: %s <br>' , Gender::name($token->getPartOfSpeech()->getGender()));
-            $debug .= sprintf('Token mood: %s <br>' , Mood::name($token->getPartOfSpeech()->getMood()));
-            $debug .= sprintf('Token number: %s <br>' , Number::name($token->getPartOfSpeech()->getNumber()));
             $debug .= sprintf('Token person: %s <br>' , Person::name($token->getPartOfSpeech()->getPerson()));
-            $debug .= sprintf('Token proper: %s <br>' , Proper::name($token->getPartOfSpeech()->getProper()));
-            $debug .= sprintf('Token reciprocity: %s <br>' , Reciprocity::name($token->getPartOfSpeech()->getReciprocity()));
-            $debug .= sprintf('Token tense: %s <br>' , Tense::name($token->getPartOfSpeech()->getTense()));
-            $debug .= sprintf('Token voice: %s <br>' , Voice::name($token->getPartOfSpeech()->getVoice()));
             $debug .= '-------------------------<br>';
 
         }
