@@ -13,6 +13,7 @@ use Google\Cloud\Language\V1\Entity\Type as EntityType;
 
 use App\Municipio;
 use App\UF;
+use DB;
 
 class Location extends Branch {
 
@@ -43,18 +44,20 @@ class Location extends Branch {
                 'value' => $reseultSet['co_uf']
             );
         // found a city
-        } else {
+        } else if ($uf) { 
             $reseultSet = Municipio::where([
                 ['nome', '=', $city],
                 ['uf', '=', $uf]
             ])->first();
-
-            $condition = array(
-               'field' => 'CO_MUNICIPIO',
-                'operator' => '=',
-                'value' => $reseultSet['id']
-            );
-        }
+        } else {
+            $reseultSet = Municipio::where('nome', $city)->first();
+        } 
+           
+        $condition = array(
+           'field' => 'CO_MUNICIPIO',
+            'operator' => '=',
+            'value' => $reseultSet['id']
+        );
 
         $tree->addCondition($condition);  
 

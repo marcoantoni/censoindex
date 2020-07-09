@@ -3,13 +3,13 @@
 
 namespace App\Tree;
 
-
 use App\Decorators\Token;
 use App\Escola;
+use App\Matricula;
 use App\Tree\Location;
 use App\Tree\School\School;
+use App\Tree\Student\Student;
 use Cache;
-use DB;
 use Google\Cloud\Language\LanguageClient;
 use Google\Cloud\Language\V1\AnnotateTextRequest\Features;
 use Google\Cloud\Language\V1\AnnotateTextResponse;
@@ -37,12 +37,11 @@ use Illuminate\Pipeline\Pipeline;
 use Session;
 
 class DecisionTree {
-
     private $annotation;
     private $conditions = [];
     private $entityies;
     private $orderBy;
-    private $query;
+    public $query;
     public $response;
     public $sentence;
     private $tokens;
@@ -63,33 +62,47 @@ class DecisionTree {
 
     public function process() {
 
-        app(Pipeline::class)
-            ->send($this)
-            ->through([
-                Location::class,
-                School::class,
-            ])->thenReturn();
-
-        $query = Escola::query();
+        app(Pipeline::class)->send($this)->through([Location::class])->thenReturn();
+        
+        if (preg_match('/alun|estudante|matricula/', $this->sentence)) {
+            app(Pipeline::class)
+                ->send($this)
+                ->through([
+                    Student::class,
+                ])->thenReturn();
+        } else{
+            app(Pipeline::class)->send($this)->through([School::class])->thenReturn();
+        } 
 
         foreach ($this->conditions as $key => $condition) {
-            $query = $query->where($condition['field'], $condition['operator'], $condition['value']);
+            $this->query = $this->query->where($condition['field'], $condition['operator'], $condition['value']);
         }
 
-        $query->orderBy($this->orderBy['column'], $this->orderBy['order']);
-       
-        // radical that indicates quantity
+        
+        // shows the answer to the user, which can be list or numeric
+        // if contains the radical "quant" the answer is numeric
+
         if (preg_match('/quant/', $this->sentence)) {
             $this->responseType = 1;
-            $this->response = $query->count();
+            $this->response = $this->query->count();
         } else {
             $this->responseType = 2;
-            $this->response = $query->get();
+            // sorting only with list
+            $this->query->orderBy($this->orderBy['column'], $this->orderBy['order']);
+            $this->response = $this->query->get();
+        
+            // show user alert
             $count = $this->response->count();
             if ($count > 100) {
                 Session::flash('warning', 'Sua pesquisa retornou '. $count . ' resultados!');
             } else if ($count == 0) {
-                Session::flash('error', 'Sua pesquisa não retornou nenhum resultado. Tente reescrever a pergunta de outro jeito. Não se esqueça que o nome da cidade e a UF devem iniciar com letras maiúsculas como em <b>Porto Alegre/RS</b>');
+                Session::flash('error', 
+                    'Sua pesquisa não retornou nenhum resultado. Podem ter acontecido três coisas <br>
+                        A resposta está certa e é mesmo <b>zero</b></br>
+                        Não consegui entender sua pergunta. Lembre de escrever o nome da cidade e a UF do seguinte com maiúsculas como em <b>Porto Alegre/RS</b></br>
+                        Talvez eu não tenho essa informação no momento </br>
+                    '
+                );
             }
         }
 
@@ -107,7 +120,7 @@ class DecisionTree {
         ]);
 
         // Create a new Document, add text as content and set type to PLAIN_TEXT
-        $document = (new Document())->setContent($this->sentence)->setType(Type::PLAIN_TEXT);
+        $document = (new Document())->setContent(strtoupper($this->sentence))->setType(Type::PLAIN_TEXT);
 
         $features = (new Features())->setExtractEntities(true)->setExtractSyntax(true);
 
@@ -127,11 +140,6 @@ class DecisionTree {
                 $debug .= sprintf('Knowledge Graph MID: %s <br>', $entity->getMetadata()->offsetGet('mid'));
             }
             $debug .= '+++++++++++++++++++++++++<br>';
-
-            if (EntityType::name($entity->getType()) == 'LOCATION') {
-                $this->localidade[] = $entity->getName();
-            }
- 
         }
 
         $debug .= '***********************<br>';
