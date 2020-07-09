@@ -12,18 +12,23 @@
   ]) !!} 
     <div class="form-group">
       <div class="input-group mb-2">
-        <input type="text" name="search" id="search" class="form-control" placeholder="Digite sua pergunta" required>
+        <input type="text" name="search" id="search" class="form-control" placeholder="Digite sua pergunta" data-toggle="popover" data-trigger="click" data-placement="top" data-html="true" data-title="Tente perguntar" required>
         <div class="input-group-prepend">
           <div class="input-group-text">?</div>
         </div>
       </div>
     </div>
     <div class="text-center">
-      <button type="submit" class="btn btn-primary" onclick="modal();">Pesquisa</button>
+      <button type="submit" id="btn-submit" class="btn btn-primary" onclick="modal();">Pesquisa</button>
       <br>
       <br>
       <h5>Informações sobre</h5>
       <img src="{{ url('images/school.png') }}" style="width: 75px; height: 75px;" title='Tente perguntar "quais escolas tem em Erechim/RS"'>
     </div>
   {{ Form::close() }}
+  <div id="PopoverContent" style="display: none;">
+    Quais escolas federais tem na cidade de Santa Maria/RS<br>
+    Quantas escolas publicas tem na cidade de Porto Alegre/RS    
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 @endsection

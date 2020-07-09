@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.0.1">
-    <title>{{ $pagetitle }}</title>
+    <title>CensoIndex</title>
     <!-- Bootstrap core CSS -->
     <link href="https://getbootstrap.com/docs/4.5/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
    
@@ -31,16 +31,16 @@
           font-size: 3.5rem;
         }
         .bd-example-modal-lg .modal-dialog{
-    display: table;
-    position: relative;
-    margin: 0 auto;
-    top: calc(50% - 24px);
-  }
+          display: table;
+          position: relative;
+          margin: 0 auto;
+          top: calc(50% - 24px);
+        }
 
-  .bd-example-modal-lg .modal-dialog .modal-content{
-    background-color: transparent;
-    border: none;
-  }
+        .bd-example-modal-lg .modal-dialog .modal-content{
+          background-color: transparent;
+          border: none;
+        }
       }
     </style>
     <!-- Custom styles for this template -->
@@ -55,7 +55,7 @@
       </nav>
       @if (isset($debug))
         <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#modalDebug">Debug NLP</a>&nbsp;&nbsp;
-        <a class="btn btn-outline-danger" href="#">Problemas com a resposta</a>
+        <a class="btn btn-outline-danger" href="https://forms.gle/ZbR8h8D5APkvRBQf6">Problemas ou sugestões</a>
       @endif
     </div>
     <div class="container">
@@ -104,7 +104,7 @@
       <!-- modal spinner -->
     <div id="modalspinner" class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1">
         <div class="modal-dialog modal-sm">
-            <div class="" style="width: 48px">
+            <div style="width: 48px">
               <div class="spinner-border text-primary" role="status">
                 <span class="sr-only">Pesquisando...</span>
               </div>
@@ -113,11 +113,30 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script type="text/javascript">
-      function modal(){
+      $(document).ready(function() {
+          $('#btn-submit').prop('disabled', true);
+      });
+     $('#search').on('keyup', function() {
+          if (this.value.length > 20){
+            $('#btn-submit').prop('disabled', false);
+            $(this).popover('hide');
+          } else {
+            $('#btn-submit').prop('disabled', true);
+          }
+      });
+            function modal(){
         $('#modalspinner').modal('show');
       }
+       $(function () {
+        $('[data-toggle="popover"]').popover({
+          sanitize: false,
+          content: function () {
+          return $("#PopoverContent").html();
+          }
+        });
+      });
     </script>
   </div>
 </body>
