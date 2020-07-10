@@ -17,9 +17,10 @@ class Location extends Branch {
         $city = null;
         $uf = null;
         $condition = [];
+        $lookingState = false;
 
         foreach ($tree->getEntityies() as $entity) {
-           if ($entity->getType() == EntityType::LOCATION || $entity->getType() == EntityType::OTHER) {
+           if ($entity->getType() == EntityType::LOCATION) {
                 $entityName = $entity->getName();
                               
                 if (strlen($entityName) == 2){
@@ -27,32 +28,43 @@ class Location extends Branch {
                 } else {
                     $city = $entityName;
                 }
-            } 
+            }
         }
-        // if not found a city is looking for a state
-        if ($city == null) {            
-            $reseultSet = UF::where('NO_UF', '=', $uf)->first();
+
+        foreach ($tree->getEntityies() as $entity) {
+           if ($entity->getType() == EntityType::OTHER) {
+                $entityName = $entity->getName();
+                $city = $entityName;
+                break;
+            }
+        }
             
-            $condition = array(
-               'field' => 'CO_UF',
-                'operator' => '=',
-                'value' => $reseultSet['co_uf']
-            );
-        // found a city
-        } else if ($uf) { 
+        // se nao encontrou uma cidade, a pesquisa é pelo estado
+        if ($city == null) {
+            $reseultSet = UF::where('NO_UF', '=', $uf)->first();
+            $lookingState = true; 
+        } elseif ($uf) {
             $reseultSet = Municipio::where([
                 ['nome', '=', $city],
                 ['uf', '=', $uf]
             ])->first();
         } else {
             $reseultSet = Municipio::where('nome', $city)->first();
+        }
+ 
+        if ($lookingState){
+            $condition = array(
+                'field' => 'CO_UF',
+                'operator' => '=',
+                'value' => $reseultSet['co_uf']
+            );
+        } else {
+            $condition = array(
+               'field' => 'CO_MUNICIPIO',
+                'operator' => '=',
+                'value' => $reseultSet['id']
+            );
         } 
-           
-        $condition = array(
-           'field' => 'CO_MUNICIPIO',
-            'operator' => '=',
-            'value' => $reseultSet['id']
-        );
 
         $tree->addCondition($condition);  
 
