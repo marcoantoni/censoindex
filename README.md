@@ -1,6 +1,6 @@
 # Censoindex
 Aplicação para pesquisar dados educacionais do Censo Escolar brasileiro disponibilizados pelo INEP através de linguagem natural
-[Demonstração: 15.223.1.191](http://15.223.1.191)
+[Demonstração: 99.79.143.96](http://99.79.143.96/)
 
 ## Como usar o sistema
 Por usar Linguagem Natural, basta fazer perguntas como se fossem dirigidas a outra pessoa. No momento, o sistema está respondendo perguntas sobre as ***escolas*** de todo o Brasil. Tente fazer perguntas parecidas com
@@ -11,12 +11,15 @@ Por usar Linguagem Natural, basta fazer perguntas como se fossem dirigidas a out
 ## Para configurar o projeto
 É necessário seguir os seguintes passos
 
-### Dependencias do Laravel
+### Instale as dependências do Laravel
 ```sh
-sudo apt install openssl php-common php-curl php-json php-mbstring php-mysql php-xml php-zip
+sudo apt install openssl php-common php-curl php-json php-mbstring php-mysql php-xml php-zip php-bcmath
 ```
-
-### Dependencias do projeto
+### Clone o repositório e entre na pasta
+```shell script
+git clone https://github.com/marcoantoni/censoindex.git && cd censoindex;
+```
+### Instale as dependências do projeto
 Se o composer estiver instalado globalmente
 ```shell script
 composer install
