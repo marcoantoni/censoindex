@@ -11,13 +11,13 @@ connection = mysql.connector.connect(
 )
 
 line_count = 0
-with open('municipios.csv') as csv_file:
+with open('estados.csv') as csv_file:
 	csv_reader = csv.reader(csv_file, delimiter=',')
 
 	for row in csv_reader:
 		try:
 			cursor = connection.cursor()
-			sql = "INSERT INTO municipios(id, CO_MUNICIPIO, NOME, UF, CO_UF) VALUES (%s, %s,'%s','%s', %s)" % (row[0], row[0], row[1], row[2], row[3])
+			sql = "INSERT INTO uf(co_uf, no_estado, no_uf) VALUES (%s,'%s','%s')" % (row[0], row[1] ,row[2])
 			cursor.execute(sql)
 			connection.commit()	
 		except TypeError as e:

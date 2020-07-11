@@ -12,9 +12,9 @@ connection = mysql.connector.connect(
 
 line_count = 0
 with open('ESCOLAS.CSV') as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter='\n')
-   
-    for row in csv_reader:
+	csv_reader = csv.reader(csv_file, delimiter='\n')
+
+	for row in csv_reader:
 	
 		data = row[0].split("|")
 		
