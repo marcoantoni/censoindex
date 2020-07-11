@@ -31,11 +31,13 @@ class Location extends Branch {
             }
         }
 
-        foreach ($tree->getEntityies() as $entity) {
-           if ($entity->getType() == EntityType::OTHER) {
-                $entityName = $entity->getName();
-                $city = $entityName;
-                break;
+        if ($city == null){
+            foreach ($tree->getEntityies() as $entity) {
+               if ($entity->getType() == EntityType::OTHER) {
+                    $entityName = $entity->getName();
+                    $city = $entityName;
+                    break;
+                }
             }
         }
             
@@ -67,7 +69,7 @@ class Location extends Branch {
         } 
 
         $tree->addCondition($condition);  
-
+      
         return $next($tree);
     }
 }

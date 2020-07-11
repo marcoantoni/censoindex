@@ -171,4 +171,7 @@ class DecisionTree {
         $this->orderBy = $orderBy;
     }
 
+    public function getConditions(){
+        return $this->conditions;
+    }
 }
