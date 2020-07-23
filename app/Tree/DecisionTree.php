@@ -60,7 +60,7 @@ class DecisionTree {
                 ->through([
                     Student::class,
                 ])->thenReturn();
-        } else{
+        } else  if (preg_match('/escola|instituto|matricula/', $this->sentence)){
             app(Pipeline::class)->send($this)->through([School::class])->thenReturn();
         } 
 
