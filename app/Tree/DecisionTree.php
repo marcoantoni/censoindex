@@ -95,7 +95,6 @@ class DecisionTree {
                 );
             }
         }
-
     }
 
     public function analyze() {
@@ -144,11 +143,15 @@ class DecisionTree {
             $debug .= sprintf('Token part of speech: %s <br>' , Tag::name($token->getPartOfSpeech()->getTag()));
             $debug .= sprintf('Token dependency edge: %s <br>' , $token->getDependencyEdge()->serializeToJsonString());
             $debug .= sprintf('Token lemma: %s <br>' , $token->getLemma());
-            $this->tokens[] = $token->getLemma();
+            
             $debug .= sprintf('Token gender: %s <br>' , Gender::name($token->getPartOfSpeech()->getGender()));
             $debug .= sprintf('Token person: %s <br>' , Person::name($token->getPartOfSpeech()->getPerson()));
             $debug .= '-------------------------<br>';
-
+            
+            // so adiciona o token se ele nao for uma stopword
+            if ($this->removeStopWords($token->getLemma())){
+                $this->tokens[] = $token->getLemma();
+            }
         }
 
         return $debug;
@@ -173,5 +176,15 @@ class DecisionTree {
 
     public function getConditions(){
         return $this->conditions;
+    }
+
+    public function removeStopWords(String $word){
+        $stopwords = array('a', 'o', 'as', 'os', 'de', 'que', 'do', 'em', 'para', 'é', 'dos', 'no');
+        
+        if (array_search($word, $stopwords))
+            return false;
+        else
+            return true;
+
     }
 }
