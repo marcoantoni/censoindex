@@ -29,7 +29,7 @@ class DecisionTree {
 
     private $annotation;
     private $conditions = [];
-    private $entityies;
+    public $entityies;
     private $orderBy;
     public $query;
     public $response;
@@ -105,7 +105,8 @@ class DecisionTree {
 
         # Instantiates a client
         $language = new LanguageServiceClient([
-            'projectId' => env('GOOGLE_PROJECT_ID')
+            'projectId' => env('GOOGLE_PROJECT_ID'),
+            'language'  => 'pt'
         ]);
 
         // Create a new Document, add text as content and set type to PLAIN_TEXT
@@ -160,6 +161,10 @@ class DecisionTree {
 
     public function getEntityies(){
         return $this->entityies;
+    }
+
+    public function setEntityies($entityies){
+        $this->entityies = $entityies;
     }
 
     public function getTokens(){

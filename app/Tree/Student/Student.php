@@ -26,6 +26,7 @@ class Student extends Branch {
                 ->through([
                     School::class,
                     Type::class,
+                    Course::class,
                 ])->thenReturn();    
         } else {
             return $next($tree);

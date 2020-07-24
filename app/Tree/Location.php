@@ -26,7 +26,7 @@ class Location extends Branch {
         // Se nao encontrou uma uf, e preciso buscar a localizacao
         $ufPresent = false;
         
-        /* No melhor caso, o foi digitado a cidade e UF. Primeiro procura a UF */
+        /* No melhor caso, foi digitado a cidade e UF. Primeiro procura a UF */
         foreach ($tree->getEntityies() as $entity) {
            if ($entity->getType() == EntityType::LOCATION) {
                 $entityName = $entity->getName();    
@@ -41,20 +41,25 @@ class Location extends Branch {
         if (!$ufPresent) {
             $uf = $this->getLocalizationByIP();
         }
-
+        $entityies = array();
         // procura o municipio
-        foreach ($tree->getEntityies() as $entity) {
-            $query = Municipio::where('uf', '=', $uf)->where('nome', 'like', '%'.$entity->getName().'%')->first();
+        foreach ($tree->getEntityies() as $key => $entity) {
+            $entityName = $entity->getName();
+            $query = Municipio::where('uf', '=', $uf)->where('nome', 'like', '%'.$entityName.'%')->first();
             // se a consulta retornou um resultado, testa se a expressao está presente na sentenca
             if ($query) {
                 $search = $query['NOME'];
                 if(preg_match("/{$search}/i", $tree->sentence)) {
                     $cityId = $query['CO_MUNICIPIO'];
                     $foundCity = true;
-                    break;
-                }
-            }   
+                } 
+            } else {
+               // print ('entityName = ' . $entityName);
+                $entityies[] = $entity;
+            }  
         }
+
+        $tree->setEntityies($entityies);
             
         // se nao encontrou uma cidade, a pesquisa é pelo estado
         if (! $cityId) {
@@ -77,8 +82,9 @@ class Location extends Branch {
         } 
 
         $tree->addCondition($condition);  
-        
+
         return $next($tree);
+
     }
     
     /**
