@@ -43,18 +43,22 @@ class SearchController extends Controller {
     }
     
     public function store(Request $request) {
+        /* Grava as perguntas no BD */;
         $log = new Log();
         $log->sentence = $request->input('search');
         $log->save();
+        // inicia o processamento
         $decision_tree = new DecisionTree($request->input('search'));
         $analyse = $decision_tree->analyze();
-        $decision_tree->process();
+        
+        $answer = $decision_tree->process();
         
         return view ('response')->with([
-            'escolas'   => $decision_tree->response,
+            'data'   => $decision_tree->response,
             'sentence'  => $decision_tree->sentence,
             'debug'     => $analyse,
-            'responseType' => $decision_tree->responseType
+            'responseType' => $answer->getResponseType(),
+            'responseTable' => $answer->getResponseTable()
         ]);
     }
 

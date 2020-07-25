@@ -14,42 +14,65 @@
         <button type="submit" class="btn btn-primary" style="margin-left: 10px;" onclick="modal();">Pesquisa</button>
       </div>
     </div>
-  {{ Form::close() }}
- 
-  @if (Session::has('warning'))
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      <strong>Aviso</strong> {!! session('warning') !!}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-  @endif
-  @if (Session::has('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      <strong>Erro</strong> {!! session('error') !!}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-  @endif
- 
-  @if ($responseType == 2)
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Escola</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($escolas as $escola)
+  {{ Form::close() }}        
+
+  @if ($responseType == 1)
+    @php
+      $count = $data->count();
+    @endphp
+    
+    @if ($count > 100) 
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Aviso</strong> Sua pesquisa retornou {{ $count }} resultados
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    @elseif ($count == 0) 
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Erro</strong> Sua pesquisa não retornou nenhum resultado. Podem ter acontecido três coisas <br>
+                A resposta está certa e é mesmo <b>zero</b></br>
+                Não consegui entender sua pergunta.Tente escrever o nome da cidade e a UF do seguinte com maiúsculas. Ex: <b>Porto Alegre/RS</b></br>
+                Talvez eu não tenho essa informação no momento </br>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    @endif
+
+    @if ($responseTable == 2)
+      <table class="table table-striped">
+        <thead>
           <tr>
-            <td>{{ $escola->NO_ENTIDADE }}</td>
-          </tr>     
-        @endforeach
-      </tbody>
-    </table>
+            <th>Escola</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($data as $value)
+            <tr>
+              <td>{{ $value->NO_ENTIDADE }}</td>
+            </tr>     
+          @endforeach
+        </tbody>
+      </table>
+    @elseif($responseTable == 3)
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Escola</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($data as $value)
+            <tr>
+              <td>{{ $value->NOME }}</td>
+            </tr>     
+          @endforeach
+        </tbody>
+      </table>
+    @endif
   @else
-    <h1>{{ $escolas }}</h1>
+    <h1>{{ $data }}</h1>
   @endif
 
   <!-- Modal -->

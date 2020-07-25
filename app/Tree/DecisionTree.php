@@ -4,7 +4,9 @@ namespace App\Tree;
 
 use App\Escola;
 use App\Matricula;
+use App\Tree\Answer;
 use App\Tree\Location;
+use App\Tree\Course;
 use App\Tree\School\School;
 use App\Tree\Student\Student;
 use Google\Cloud\Language\LanguageClient;
@@ -24,8 +26,6 @@ use Illuminate\Pipeline\Pipeline;
 use Session;
 
 class DecisionTree {
-    public const NUMBER = 1;
-    public const LIST = 2;
 
     private $annotation;
     private $conditions = [];
@@ -35,8 +35,8 @@ class DecisionTree {
     public $response;
     public $sentence;
     private $tokens;
-    public $responseType;
-    public $userMessage = [];
+
+    private $answer;
 
     protected function normalizeSentence(string $sentence): string {
         $sentence = trim(preg_replace('/\s+/',' ',$sentence));
@@ -48,10 +48,15 @@ class DecisionTree {
         $this->sentence = $this->normalizeSentence($sentence);
         $this->tokens = array();
         $this->conditions = array();
+        $this->answer = new Answer();
+        // Por padrao a resposta se refere a lista de escolas. 
+        $this->answer->setResponseTable(Answer::SCHOOL);
+        $this->answer->setResponseType(Answer::LIST);
     }
 
     public function process() {
 
+        $questionIsCourse = false;
         app(Pipeline::class)->send($this)->through([Location::class])->thenReturn();
         
         if (preg_match('/alun|estudante|matricula/', $this->sentence)) {
@@ -62,39 +67,29 @@ class DecisionTree {
                 ])->thenReturn();
         } else  if (preg_match('/escola|instituto|matricula/', $this->sentence)){
             app(Pipeline::class)->send($this)->through([School::class])->thenReturn();
-        } 
-
-        foreach ($this->conditions as $key => $condition) {
-            $this->query = $this->query->where($condition['field'], $condition['operator'], $condition['value']);
+        } else  if (preg_match('/curso/', $this->sentence)){
+            app(Pipeline::class)->send($this)->through([Course::class])->thenReturn();
+            $questionIsCourse = true;
         }
 
-        
-        // shows the answer to the user, which can be list or numeric
-        // if contains the radical "quant" the answer is numeric
+        if (! $questionIsCourse) {
+            foreach ($this->conditions as $key => $condition) {
+                $this->query = $this->query->where($condition['field'], $condition['operator'], $condition['value']);
+            }
+        } else {    
+            $this->answer->setResponseTable(Answer::COURSE);
+        }
 
+        // se o primeiro token tiver o radical quant, a resposta é numérica
         if (preg_match('/quant/', $this->tokens[0])) {
-            $this->responseType = self::NUMBER;
+            $this->answer->setResponseType(Answer::NUMBER);
             $this->response = $this->query->count();
         } else {
-            $this->responseType = self::LIST;
-            // sorting only with list
+            // ordenação somente na visualização em lista
             $this->query->orderBy($this->orderBy['column'], $this->orderBy['order']);
             $this->response = $this->query->get();
-        
-            // show user alert
-            $count = $this->response->count();
-            if ($count > 100) {
-                Session::flash('warning', 'Sua pesquisa retornou '. $count . ' resultados!');
-            } else if ($count == 0) {
-                Session::flash('error', 
-                    'Sua pesquisa não retornou nenhum resultado. Podem ter acontecido três coisas <br>
-                        A resposta está certa e é mesmo <b>zero</b></br>
-                        Não consegui entender sua pergunta. Lembre de escrever o nome da cidade e a UF do seguinte com maiúsculas como em <b>Porto Alegre/RS</b></br>
-                        Talvez eu não tenho essa informação no momento </br>
-                    '
-                );
-            }
         }
+        return $this->answer;
     }
 
     public function analyze() {
@@ -171,6 +166,7 @@ class DecisionTree {
         return $this->tokens;
     }
 
+    // adiciona uma condição  a clausula where
     public function addCondition(array $condition){
         $this->conditions[] = $condition;
     }
@@ -182,7 +178,16 @@ class DecisionTree {
     public function getConditions(){
         return $this->conditions;
     }
-
+    
+    /**
+    *
+    * Teste se uma palavra é uma stopword
+    * Não é uma lista completa de stopwords em pt-br
+    * Essas stopwords são comuns nas perguntas que o sistema pretende responder
+    * @author   Marco Antoni <marco.antoni910@gmail.com>
+    * @return   bool
+    *
+    */
     public function removeStopWords(String $word){
         $stopwords = array('a', 'o', 'as', 'os', 'de', 'que', 'do', 'em', 'para', 'é', 'dos', 'no');
         
