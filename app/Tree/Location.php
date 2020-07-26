@@ -6,9 +6,11 @@ use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use Closure;
 use App\Municipio;
+use App\Matricula;
 use App\UF;
 use Google\Cloud\Language\V1\Entity\Type as EntityType;
 use Request;
+use Session;
 
 class Location extends Branch {
 
@@ -16,7 +18,6 @@ class Location extends Branch {
      
         $cityId = null;
         $condition = [];
-        $foundCity = false;
         $lookingState = false;
         $reseultSet = null;
         $uf = null;
@@ -33,7 +34,9 @@ class Location extends Branch {
                 if (strlen($entityName) == 2){
                     $uf = $entityName;
                     $ufPresent = true;
-                } 
+                } else {
+                    $entityies[] = $entity;
+                }
             }
         }
 
@@ -41,34 +44,36 @@ class Location extends Branch {
         if (!$ufPresent) {
             $uf = $this->getLocalizationByIP();
         }
-        $entityies = array();
+
         // procura o municipio
         foreach ($tree->getEntityies() as $key => $entity) {
             $entityName = $entity->getName();
-            if (strlen($entityName) > 2 ) {
+          
+            //if (strlen($entityName) > 2 ) {
                 $query = Municipio::where('uf', '=', $uf)->where('nome', 'like', '%'.$entityName.'%')->first();
                 // se a consulta retornou um resultado, testa se a expressao está presente na sentenca
                 if ($query) {
                     $search = $query['NOME'];
                     if(preg_match("/{$search}/i", $tree->sentence)) {
                         $cityId = $query['CO_MUNICIPIO'];
-                        $foundCity = true;
-                    } 
-                } else {
-                    $entityies[] = $entity;
-                }  
-            }
+                        session(['CO_MUNICIPIO' => $cityId ]);
+                        session(['NOME_MUNICIPIO' => $query['NOME'] ]);
+                        break;
+                    } else {
+                        session(['CO_MUNICIPIO' => false ]);
+                        session(['NOME_MUNICIPIO' => false ]);
+                    }
+                }
+            //}
         }
+        
+        // Busca e armazena o CO_UF na sessão
+        // Pode ser necessário para buscar estatistícas do estado    
+        $reseultSet = UF::where('NO_UF', '=', $uf)->first();
+        session(['CO_UF' => $reseultSet['co_uf'] ]);
+        session(['NO_UF' => $reseultSet['no_uf'] ]);
 
-        $tree->setEntityies($entityies);
-            
-        // se nao encontrou uma cidade, a pesquisa é pelo estado
-        if (! $cityId) {
-            $reseultSet = UF::where('NO_UF', '=', $uf)->first();
-            $lookingState = true; 
-        } 
- 
-        if ($lookingState){
+        if (! $cityId){
             $condition = array(
                 'field' => 'CO_UF',
                 'operator' => '=',

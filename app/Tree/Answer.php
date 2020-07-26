@@ -16,6 +16,11 @@ class Answer {
     private $responseTable;
 
     private $data;
+    public $statistics;
+
+    public function __construct(){
+        $this->statistics = array();
+    }
 
     public function getResponseType(){
         return $this->responseType;

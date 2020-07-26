@@ -20,7 +20,6 @@ class Student extends Branch {
         if (preg_match('/alun|estudante|matricula/', $tree->sentence)) {
             $tree->query = Matricula::query();
             
-
             return app(Pipeline::class)
                 ->send($tree)
                 ->through([

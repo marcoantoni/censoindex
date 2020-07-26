@@ -29,14 +29,14 @@ class DecisionTree {
 
     private $annotation;
     private $conditions = [];
-    public $entityies;
+    private $entityies;
     private $orderBy;
     public $query;
     public $response;
     public $sentence;
     private $tokens;
 
-    private $answer;
+    public $answer;
 
     protected function normalizeSentence(string $sentence): string {
         $sentence = trim(preg_replace('/\s+/',' ',$sentence));
@@ -159,7 +159,11 @@ class DecisionTree {
     }
 
     public function setEntityies($entityies){
+        //$this->entityies = array();
         $this->entityies = $entityies;
+        foreach ($entityies as $key => $value) {
+            print('setEntidade: ' . $value->getName() );
+        }
     }
 
     public function getTokens(){
