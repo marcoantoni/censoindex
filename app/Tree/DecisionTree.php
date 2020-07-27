@@ -82,7 +82,6 @@ class DecisionTree {
 
         // se o primeiro token tiver o radical quant, a resposta é numérica
         if (preg_match('/quant/', $this->tokens[0])) {
-            $this->answer->setResponseType(Answer::NUMBER);
             $this->response = $this->query->count();
         } else {
             // ordenação somente na visualização em lista

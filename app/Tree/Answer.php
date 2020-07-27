@@ -6,16 +6,19 @@ class Answer {
 	/* Tipo da resposta */
 	public const NUMBER = 0;
     public const LIST = 1;
+    /* Quanto ocorre de aparecer mais de uma entidade em uma resposta númerica */
+    public const NUMBERLIST = 10;
 
     /* Mapeamento da tabela presente na resposta */
     public const SCHOOL = 2;
     public const COURSE = 3;
 
+
     /* Tipo da resposta */
     private $responseType;
     private $responseTable;
 
-    private $data;
+    public $data;
     public $statistics;
 
     public function __construct(){
