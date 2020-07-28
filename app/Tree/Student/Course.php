@@ -22,7 +22,6 @@ class Course extends Branch {
 				
 				$course = Curso::where('NOME', 'like', '%'.$tokens[$i].'%')->first();
 
-				print(' ' . $course['CO_CURSO_EDUC_PROFISSIONAL'] . '<br>');
 				if ($course) {
 					$condition = array(
 						'field' => 'CO_CURSO_EDUC_PROFISSIONAL',
@@ -38,14 +37,4 @@ class Course extends Branch {
 		return $next($tree);
 
 	}
-	
-	/*public function array_search(array $needle , array $haystack) {
-        
-        foreach ($needle as $key => $value) {
-            $found = array_search ($value, $haystack);
-            if ($found >= 0)
-                return $found;
-        }
-        return false;
-   	}*/
 }

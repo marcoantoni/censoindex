@@ -11,7 +11,8 @@ class Answer {
 
     /* Mapeamento da tabela presente na resposta */
     public const SCHOOL = 2;
-    public const COURSE = 3;
+    public const STUDENT = 3;
+    public const COURSE = 4;
 
 
     /* Tipo da resposta */

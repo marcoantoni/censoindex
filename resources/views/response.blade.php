@@ -15,8 +15,8 @@
       </div>
     </div>
   {{ Form::close() }}        
-
-  @if ($responseType == 1)
+  {{-- Quanto a resposta é em lista, faz a contagem para dar os avisos ao usuário --}}
+  @if ($responseType == Answer::LIST)
     @php
       $count = $data->count();
     @endphp
@@ -39,8 +39,8 @@
         </button>
       </div>
     @endif
-
-    @if ($responseTable == 2)
+    {{-- Visualização em lista. Testa se resposta é relacionada a escola --}}
+    @if ($responseTable == Answer::SCHOOL)
       <table class="table table-striped">
         <thead>
           <tr>
@@ -55,11 +55,12 @@
           @endforeach
         </tbody>
       </table>
-    @elseif($responseTable == 3)
+    {{-- Visualização em lista. Testa se resposta é relacionada a cursos --}}
+    @elseif($responseTable == Answer::COURSE)
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Escola</th>
+            <th>Curso</th>
           </tr>
         </thead>
         <tbody>
@@ -71,8 +72,57 @@
         </tbody>
       </table>
     @endif
+  {{-- Se a resposta não for em lista, ela pode ser do tipo NUMBERLIST, ou seja, retornou mais que um resultado para uma resposta numérica --}}
+  {{-- Esse tipo de resposta só estará relacionada a tabela Matriculas --}}
+  @elseif ($responseType == Answer::NUMBERLIST)
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Escola</th>
+          <th>
+            Quantidade de alunos 
+            @if (!session('messageTransport'))
+              {{ session('messageTransport') }}             
+            @endif
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach ($schoolsList as $key => $value)
+          <tr>
+            <td>{{ $value[0]}}</td>
+            <td>{{ $value[1]->count() }}</td>
+          </tr>
+        @endforeach
+      </tbody>
+    </table>
+  {{-- Aqui a resposta é numérica e só contem uma entidade --}}
   @else
-    <h1>{{ $data }}</h1>
+    <p>      
+      @if (session('NO_ENTIDADE') != false) 
+        {{ session('NO_ENTIDADE') }} 
+      @endif
+
+      @if (session('NOME_MUNICIPIO') == false) 
+        {{ session('NO_ESTADO') }} 
+      @else
+        {{ session('NOME_MUNICIPIO') }} 
+      @endif
+
+      tem
+
+      <b>{{ $data }}</b> 
+
+      @if ($responseTable == Answer::SCHOOL)
+        escolas
+      @else
+        alunos
+        {{-- Apresenta  a menssagem caso a pesquisa busque informações sobre transporte utilizado --}}
+        @if (!session('messageTransport'))
+          {{ session('messageTransport') }}
+        @endif
+      @endif
+    </p>
   @endif
 
   <!-- Modal -->

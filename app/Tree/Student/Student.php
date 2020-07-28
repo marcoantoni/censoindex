@@ -18,6 +18,7 @@ class Student extends Branch {
         if (preg_match('/alun|estudante|matricula/', $tree->sentence)) {
             $tree->query = Matricula::query();
             $tree->answer->data = array();
+            $tree->answer->setResponseTable(Answer::STUDENT);
             
             return app(Pipeline::class)
                 ->send($tree)
