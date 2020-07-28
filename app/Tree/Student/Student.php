@@ -24,7 +24,7 @@ class Student extends Branch {
                 ->send($tree)
                 ->through([
                     School::class,
-                    Type::class,
+                    TransportType::class,
                     Course::class,
                 ])->thenReturn();    
         } else {

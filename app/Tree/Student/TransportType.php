@@ -8,7 +8,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Session;
 
-class Type extends Branch {
+class TransportType extends Branch {
 	
 	function handle(DecisionTree $tree, Closure $next): DecisionTree {
 		
@@ -53,9 +53,9 @@ class Type extends Branch {
 		}
 
 		if ($condition){
-			if ($schoolsFound == 1){
+			if ($schoolsFound == 0 || $schoolsFound == 1){
 				$tree->addCondition($condition);
-			} else if ($schoolsFound > 1){
+			} else {
 				// Percorre o array $data da classe Answer
 				// O indíce [0] armazena o nome da escola enquanto o [1] armazena o objeto da classe Builder que representa o número de alunos
 				// Basta adicionar a restrição a consulta 
