@@ -50,6 +50,7 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
       <h5 class="my-0 mr-md-auto font-weight-normal">PPGCP - UFSM</h5>
       <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="#" data-toggle="modal" data-target="#modalAjuda">Ajuda</a>
         <a class="p-2 text-dark" href="#">Sobre</a>
         <a class="p-2 text-dark" href="#">Origem dos dados</a>
       </nav>
@@ -110,6 +111,33 @@
               </div>
             </div>
         </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalAjuda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Como usar o sistema?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Faça perguntas como se fossem dirigidas a outra pessoa. No momento, consigo responder essas perguntas :) <br>
+            <br> Quais escolas federais tem em Santa Maria/RS - restrições de escolas particulares e publicas (municipais, estaduais) também funcionam
+            <br> quais escolas particulares existem em Frederico Westphalen/RS
+            <br> quantos alunos tem na cidade de Rolante/RS
+            <br> quantos alunos tem na escola visconde de cairu em Santa Rosa/RS
+            <br> quantos alunos tem em Rolante/RS que usam transporte publico
+            <br> quantos alunos tem no ifrs Rolante/RS no curso tecnico em informatica
+            <br> Quais cursos tem na cidade de Taquara/RS
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
