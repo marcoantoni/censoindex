@@ -18,8 +18,6 @@ class Student extends Branch {
         if (preg_match('/alun|estudante|matricula/', $tree->sentence)) {
             $tree->query = Matricula::query();
             $tree->answer->data = array();
-            // Sempre que a execução vier para este galho, a resposta será numérica
-            $tree->answer->setResponseType(Answer::NUMBER);
             
             return app(Pipeline::class)
                 ->send($tree)

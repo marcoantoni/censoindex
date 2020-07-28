@@ -80,11 +80,17 @@ class DecisionTree {
             $this->answer->setResponseTable(Answer::COURSE);
         }
 
-        // se o primeiro token tiver o radical quant, a resposta é numérica
+        // Se o primeiro token tiver o radical quant, a resposta é numérica
         if (preg_match('/quant/', $this->tokens[0])) {
+            $this->answer->setResponseType(Answer::NUMBER);
             $this->response = $this->query->count();
+            
+            if (session('schoolsFound') > 1) {
+                $this->answer->setResponseType(Answer::NUMBERLIST);
+            }
+
         } else {
-            // ordenação somente na visualização em lista
+            // Ordenação somente na visualização em lista
             $this->query->orderBy($this->orderBy['column'], $this->orderBy['order']);
             $this->response = $this->query->get();
         }

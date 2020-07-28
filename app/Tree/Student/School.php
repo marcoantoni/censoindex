@@ -15,17 +15,16 @@ class School extends Branch {
 	
 	function handle(DecisionTree $tree, Closure $next): DecisionTree {
 		
+		$cityId = session('CO_MUNICIPIO');	// essa variável é inicializada em app\Tree\Location.php
 		$school = null;
-		$cityId = session('CO_MUNICIPIO');
 		$schoolsFound = 0;
 		$condition = null;
+		$no_entidade = '';	// escrito assim pois se refere ao atribudo do banco de dados
 
 		// Inicializa as variáveis de sessão com valores default
 		session(['NO_ENTIDADE' => false]);
 		session(['schoolsFound' => 0]);
 
-		print('Cidade: '.session('NOME_MUNICIPIO').' UF: '.session('NO_UF').'<br>');		
-		
 		foreach ($tree->getEntityies() as $entity) {
 
 			$entityName = $entity->getName();
@@ -37,14 +36,15 @@ class School extends Branch {
 				$school = Escola::where('CO_MUNICIPIO', $cityId)->where('NO_ENTIDADE', 'like', '%'.$entityName.'%')->first();
 				
 				if ($school){
+					$no_entidade = $school['NO_ENTIDADE'];
 					$condition = array(
 						'field' => 'CO_ENTIDADE',
 						'operator' => '=',
 						'value' => $school['CO_ENTIDADE']
 					);
-
-					$count = Matricula::where('CO_ENTIDADE', $school['CO_ENTIDADE']);
-					$arrData = array($school['NO_ENTIDADE'], $count);
+				
+					$builder = Matricula::where('CO_ENTIDADE', $school['CO_ENTIDADE'] );
+					$arrData = array($no_entidade, $builder);
 					$tree->answer->data[] = $arrData;
 					$schoolsFound++;
 				}	
@@ -52,10 +52,8 @@ class School extends Branch {
 		}
 
 		if ($schoolsFound == 1){
-			session(['NO_ENTIDADE' => $school['NO_ENTIDADE'] ]);
+			session(['NO_ENTIDADE' => $no_entidade ]);
 			$tree->addCondition($condition);
-		} else if ($schoolsFound > 1) {
-			$tree->answer->setResponseType(Answer::NUMBERLIST);
 		}
 
 		session(['schoolsFound' => $schoolsFound]);
