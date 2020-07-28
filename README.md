@@ -3,10 +3,14 @@ Aplicação para pesquisar dados educacionais do Censo Escolar brasileiro dispon
 [Demonstração: 99.79.143.96](http://99.79.143.96/)
 
 ## Como usar o sistema
-Por usar Linguagem Natural, basta fazer perguntas como se fossem dirigidas a outra pessoa. No momento, o sistema está respondendo perguntas sobre as ***escolas*** de todo o Brasil. Tente fazer perguntas parecidas com
-	* Quais escolas federais tem em Santa Maria/RS
-	* Quantas escolas particulares existem em Frederico Westphalen/RS
-
+Por usar Linguagem Natural, basta fazer perguntas como se fossem dirigidas a outra pessoa. No momento, o sistema está respondendo as seguintes perguntas. 
+	* Quais escolas federais tem em Santa Maria/RS - restrições de escolas particulares e publicas (municipais, estaduais) também funcionam
+	* quais escolas particulares existem em Frederico Westphalen/RS
+	* quantos alunos tem na cidade de Rolante/RS
+	* quantos alunos tem na escola visconde de cairu em Santa Rosa/RS
+	* quantos alunos tem em Rolante/RS que usam transporte publico
+	* quantos alunos tem no ifrs Rolante/RS no curso tecnico em informatica
+	* Quais cursos tem na cidade de Taquara/RS
 
 ## Para configurar o projeto
 É necessário seguir os seguintes passos
