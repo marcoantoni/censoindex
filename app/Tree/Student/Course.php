@@ -14,6 +14,7 @@ class Course extends Branch {
 		
 		$tokens = $tree->getTokens();
 		$position = array_search('tecnico', $tokens);
+		$messageCourse = false;
 
 		if ($position) {
 			for ($i = $position+1; $i < count($tokens); $i++) {
@@ -27,10 +28,13 @@ class Course extends Branch {
 						'value' => $course['CO_CURSO_EDUC_PROFISSIONAL']
 		        	);
 		        	$tree->setQuery($tree->getQuery()->where('CO_CURSO_EDUC_PROFISSIONAL', $course['CO_CURSO_EDUC_PROFISSIONAL']));
+		        	$messageCourse = $course['NOME'];
 		        	break;
 				}
 			}
 		}
+
+		session(['messageCourse' => $messageCourse ]);
 
 		return $next($tree);
 

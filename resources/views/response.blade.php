@@ -60,7 +60,7 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>{{ (session('NO_ENTIDADE')) ? session('NO_ENTIDADE') : session('NOME_MUNICIPIO') }}</th>
+            <th>{{ (session('NO_ENTIDADE')) ? "Cursos em " . session('NO_ENTIDADE') . " na cidade de " . session('NOME_MUNICIPIO') : "Cursos na cidade de " .session('NOME_MUNICIPIO') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -99,8 +99,8 @@
   {{-- Aqui a resposta é numérica e só contem uma entidade --}}
   @else
     <p>      
-      @if (session('NO_ENTIDADE') != false) 
-        {{ session('NO_ENTIDADE') }} 
+      @if (session('NO_ENTIDADE')) 
+        {{ session('NO_ENTIDADE') }} na cidade de 
       @endif
 
       @if (session('NOME_MUNICIPIO') == false) 
@@ -115,12 +115,20 @@
 
       @if ($responseTable == Answer::SCHOOL)
         escolas
-      @else
+      @elseif ($responseTable == Answer::STUDENT)
         alunos
-        {{-- Apresenta  a menssagem caso a pesquisa busque informações sobre transporte utilizado --}}
-        @if (session('messageTransport'))
-          {{ session('messageTransport') }}
-        @endif
+      @else
+        cursos  
+      @endif
+      
+      {{-- Apresenta  a menssagem caso a pesquisa busque informações sobre transporte utilizado --}}
+      @if (session('messageTransport'))
+        {{ session('messageTransport') }}
+      @endif
+
+      {{-- Apresenta a menssagem caso a pesquisa busque informações sobre o curso --}}
+      @if (session('messageCourse'))
+        no curso técnico em {{ session('messageCourse') }}
       @endif
     </p>
   @endif
@@ -129,6 +137,8 @@
   Escola {{ session('NO_ENTIDADE') }} <br>
   Cidade {{ session('NOME_MUNICIPIO') }} <br>
   Estado {{ session('NO_UF') }} <br>
+  Transporte {{ session('messageTransport') }} <br>
+  Curso {{ session('messageCourse') }} <br>
 
   <!-- Modal debug-->
   <div class="modal fade" id="modalDebug" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

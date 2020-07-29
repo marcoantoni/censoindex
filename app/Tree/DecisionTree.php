@@ -30,7 +30,6 @@ class DecisionTree {
     private $annotation;
     private $conditions = [];
     private $entityies;
-    private $orderBy;
     public $query;
     public $response;
     public $sentence;

@@ -89,6 +89,7 @@ class Location extends Branch {
             );
         } 
 
+        //$tree->setQuery($tree->getQuery()->where($condition['field'], $condition['value']));
         $tree->addCondition($condition);  
 
         return $next($tree);

@@ -17,7 +17,7 @@ class School extends Branch {
         return app(Pipeline::class)
             ->send($tree)
             ->through([
-                Type::class,
+                TypeSchool::class,
                 Order::class
             ])->thenReturn();
    }

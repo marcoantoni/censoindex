@@ -8,21 +8,17 @@ use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use App\Tree\Student\School;
 use Closure;
-use Illuminate\Pipeline\Pipeline;
 use DB;
+use Illuminate\Pipeline\Pipeline;
 use Session;
 
 class Course extends Branch {
 	
 	function handle(DecisionTree $tree, Closure $next): DecisionTree {
 
-		foreach ($tree->getConditions() as $key => $condition) {
+		$cityId = session('CO_MUNICIPIO');	// essa variável é inicializada em app\Tree\Location.php
 
-			if ($condition['field'] == 'CO_MUNICIPIO') {
-				$cityId =  $condition['value'];
-				break;
-			}
-		}
+		$tree->setQuery(Curso::query());
 
 		// Vai para o App\Tree\Student\School para verificar se a pergunta possui uma escola
         app(Pipeline::class)
@@ -43,9 +39,8 @@ class Course extends Branch {
 				->toArray();
 		}
 		
-		$tree->query = DB::table('cursos')->whereIn('CO_CURSO_EDUC_PROFISSIONAL', array_values($coursesId));
-		$tree->setOrder(['column' => 'NOME', 'order' => 'ASC']);
-
+		$tree->query = DB::table('cursos')->whereIn('CO_CURSO_EDUC_PROFISSIONAL', array_values($coursesId))->orderBy('NOME', 'ASC');
+		
 		return $next($tree);
 	}	
 }
