@@ -48,7 +48,7 @@ class DecisionTree {
         $this->tokens = array();
         $this->conditions = array();
         $this->answer = new Answer();
-        // Por padrao a resposta se refere a lista de escolas. 
+        // Por padrão a resposta se refere a lista de escolas. 
         $this->answer->setResponseTable(Answer::SCHOOL);
         $this->answer->setResponseType(Answer::LIST);
     }
@@ -67,22 +67,30 @@ class DecisionTree {
                     ->through([
                         Student::class,
                     ])->thenReturn();
+                    $this->answer->setDomain(true);
                     break;
             } else  if (preg_match('/escola|instituto|colegio/', $token)){
                 app(Pipeline::class)
                     ->send($this)
                     ->through([School::class])
                     ->thenReturn();
+                    $this->answer->setDomain(true);
                     break;
             } else  if (preg_match('/curso/', $token)){
                 app(Pipeline::class)
                     ->send($this)
                     ->through([Course::class])
                     ->thenReturn();
+                $this->answer->setDomain(true);
                 $questionIsCourse = true;
                 $this->answer->setResponseTable(Answer::COURSE);
                 break;
-            }            
+            }           
+        }
+
+        // A pergunta não está dentro do domínio aceito
+        if ($this->answer->getDomain() == false){
+            return $this->answer; 
         }
 
         if (! $questionIsCourse) {

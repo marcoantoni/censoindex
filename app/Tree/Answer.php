@@ -21,9 +21,11 @@ class Answer {
 
     public $data;
     public $statistics;
+    private $inDomain;
 
     public function __construct(){
         $this->statistics = array();
+        $this->inDomain = false; // Por padrão a pergunta é aceita
     }
 
     public function getResponseType(){
@@ -48,5 +50,13 @@ class Answer {
 
     public function setData($data){
         $this->$data = $data;
-    }    
+    }
+
+    public function getDomain(){
+        return $this->inDomain;
+    }
+
+    public function setDomain(bool $inDomain) {
+        $this->inDomain = $inDomain;
+    }  
 }

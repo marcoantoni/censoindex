@@ -58,7 +58,10 @@ class SearchController extends Controller {
             'sentence'  => $decision_tree->sentence,
             'debug'     => $analyse,
             'responseType' => $answer->getResponseType(),
-            'responseTable' => $answer->getResponseTable()
+            'responseTable' => $answer->getResponseTable(),
+            'stats' => $answer->statistics,
+            'schoolsList'   => $answer->data,
+            'inDomain'  => $answer->getDomain()
         ]);
     }
 
