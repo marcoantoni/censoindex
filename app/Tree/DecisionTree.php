@@ -214,4 +214,12 @@ class DecisionTree {
             return true;
 
     }
+
+    public function getQuery(){
+        return $this->query;
+    }
+
+    public function setQuery($query){
+        $this->query = $query;
+    }
 }

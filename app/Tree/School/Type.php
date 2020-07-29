@@ -2,7 +2,6 @@
 
 namespace App\Tree\School;
 
-use App\Decorators\Token;
 use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use Closure;
@@ -13,7 +12,7 @@ class Type extends Branch {
 	const PRIVATECSCHOOL = 1; 
 	const COMUNITARYSCHOOL = 2; 
 	const CONFESSIONALSCHOOL = 3; 
-	const PHILANTHROPICSCHOOL = 4; 
+	const PHILANTHROPICSCHOOL = 4;
 
 	function handle(DecisionTree $tree, Closure $next): DecisionTree {
 		
@@ -38,13 +37,7 @@ class Type extends Branch {
 				}
 			}
 
-	        $condition = array(
-	           'field' => 'TP_CATEGORIA_ESCOLA_PRIVADA',
-	            'operator' => $operator,
-	            'value' => $typeSchol
-	        );
-
-	        $tree->addCondition($condition);
+	        $tree->setQuery($tree->getQuery()->where('TP_CATEGORIA_ESCOLA_PRIVADA', $operator, $typeSchol));
 	    }
 
 	    // search for public schools:
@@ -65,13 +58,7 @@ class Type extends Branch {
 				}
 			}
 
-	        $condition = array(
-	           	'field' => 'TP_DEPENDENCIA',
-	            'operator' => $operator,
-	            'value' => $typeSchol
-	        );
-
-	        $tree->addCondition($condition);
+	        $tree->setQuery($tree->getQuery()->where('TP_DEPENDENCIA', $typeSchol));
 	    }
 
 		return $next($tree);
