@@ -60,7 +60,7 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Curso</th>
+            <th>{{ (session('NO_ENTIDADE')) ? session('NO_ENTIDADE') : session('NOME_MUNICIPIO') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -104,9 +104,9 @@
       @endif
 
       @if (session('NOME_MUNICIPIO') == false) 
-        {{ session('NO_ESTADO') }} 
+        {{ session('NO_UF') }} 
       @else
-        {{ session('NOME_MUNICIPIO') }} 
+        {{ session('NOME_MUNICIPIO') }}/{{ session('NO_UF') }}
       @endif
 
       tem
@@ -118,12 +118,17 @@
       @else
         alunos
         {{-- Apresenta  a menssagem caso a pesquisa busque informações sobre transporte utilizado --}}
-        @if (!session('messageTransport'))
+        @if (session('messageTransport'))
           {{ session('messageTransport') }}
         @endif
       @endif
     </p>
   @endif
+
+  <h1>Debug</h1>
+  Escola {{ session('NO_ENTIDADE') }} <br>
+  Cidade {{ session('NOME_MUNICIPIO') }} <br>
+  Estado {{ session('NO_UF') }} <br>
 
   <!-- Modal debug-->
   <div class="modal fade" id="modalDebug" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

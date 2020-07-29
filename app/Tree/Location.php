@@ -22,10 +22,17 @@ class Location extends Branch {
         $reseultSet = null;
         $uf = null;
         $ufId = null;
-        
+
         // variavel de controle para saber se foi especificado uma localizacao (uf) dentro da busca.
         // Se nao encontrou uma uf, e preciso buscar a localizacao
         $ufPresent = false;
+
+        // Inicializa as variáveis de sessão com valores default
+        session(['CO_MUNICIPIO' => false ]);
+        session(['NOME_MUNICIPIO' => false ]);
+        session(['CO_UF' => false ]);
+        session(['NO_UF' => false ]);
+
         
         /* No melhor caso, foi digitado a cidade e UF. Primeiro procura a UF */
         foreach ($tree->getEntityies() as $entity) {
@@ -48,27 +55,22 @@ class Location extends Branch {
         // procura o municipio
         foreach ($tree->getEntityies() as $key => $entity) {
             $entityName = $entity->getName();
-          
-            //if (strlen($entityName) > 2 ) {
-                $query = Municipio::where('uf', '=', $uf)->where('nome', 'like', '%'.$entityName.'%')->first();
-                // se a consulta retornou um resultado, testa se a expressao está presente na sentenca
-                if ($query) {
+
+            $query = Municipio::where('uf', '=', $uf)->where('nome', 'like', '%'.$entityName.'%')->first();
+            // se a consulta retornou um resultado, testa se a expressao está presente na sentenca
+            if ($query) {
                     $search = $query['NOME'];
-                    if(preg_match("/{$search}/i", $tree->sentence)) {
-                        $cityId = $query['CO_MUNICIPIO'];
-                        session(['CO_MUNICIPIO' => $cityId ]);
-                        session(['NOME_MUNICIPIO' => $query['NOME'] ]);
-                        break;
-                    } else {
-                        session(['CO_MUNICIPIO' => false ]);
-                        session(['NOME_MUNICIPIO' => false ]);
-                    }
+                if(preg_match("/{$search}/i", $tree->sentence)) {
+                    $cityId = $query['CO_MUNICIPIO'];
+                    session(['CO_MUNICIPIO' => $cityId ]);
+                    session(['NOME_MUNICIPIO' => $query['NOME'] ]);
+                    break;
                 }
-            //}
+            }
         }
         
-        // Busca e armazena o CO_UF na sessão
-        // Pode ser necessário para buscar estatistícas do estado    
+        // Busca e armazena o CO_UF e o NO_UF na sessão
+        // Pode ser necessário para buscar estatistícas do estado e necessário para apresentação da resposta personalizada das perguntas 
         $reseultSet = UF::where('NO_UF', '=', $uf)->first();
         session(['CO_UF' => $reseultSet['co_uf'] ]);
         session(['NO_UF' => $reseultSet['no_uf'] ]);
