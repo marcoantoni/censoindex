@@ -64,8 +64,9 @@ class TransportType extends Branch {
 					$value[1]->where($condition['field'], $condition['operator'], $condition['value']);
 				}
 			}
-			session(['messageTransport' => $messageTransport ]);
 		}
+	
+		session(['messageTransport' => $messageTransport ]);
 
 		return $next($tree);
 	
