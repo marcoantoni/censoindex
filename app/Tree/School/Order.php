@@ -11,9 +11,9 @@ class Order extends Branch {
     function handle(DecisionTree $tree, Closure $next): DecisionTree {
        
         if (array_intersect($tree->getTokens(), ['desc','decrescente','inverso'])) {
-            $tree->setOrder(['column' => 'NO_ENTIDADE', 'order' => 'DESC']);        
+            $tree->setQuery($tree->getQuery()->orderBy('NO_ENTIDADE', 'DESC'));  
         } else {
-	        $tree->setOrder(['column' => 'NO_ENTIDADE', 'order' => 'ASC']);        
+	        $tree->setQuery($tree->getQuery()->orderBy('NO_ENTIDADE', 'ASC'));
         } 
 
         return $next($tree);

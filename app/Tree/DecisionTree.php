@@ -98,8 +98,6 @@ class DecisionTree {
             }
 
         } else {
-            // Ordenação somente na visualização em lista
-            $this->query->orderBy($this->orderBy['column'], $this->orderBy['order']);
             $this->response = $this->query->get();
         }
         return $this->answer;
@@ -186,10 +184,6 @@ class DecisionTree {
     // adiciona uma condição  a clausula where
     public function addCondition(array $condition){
         $this->conditions[] = $condition;
-    }
-
-    public function setOrder(array $orderBy){
-        $this->orderBy = $orderBy;
     }
 
     public function getConditions(){
