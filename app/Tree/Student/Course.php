@@ -7,8 +7,6 @@ use App\Decorators\Token;
 use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
-use Log;
 
 class Course extends Branch {
 	
@@ -28,7 +26,7 @@ class Course extends Branch {
 						'operator' => '=',
 						'value' => $course['CO_CURSO_EDUC_PROFISSIONAL']
 		        	);
-		        	$tree->addCondition($condition);
+		        	$tree->setQuery($tree->getQuery()->where('CO_CURSO_EDUC_PROFISSIONAL', $course['CO_CURSO_EDUC_PROFISSIONAL']));
 		        	break;
 				}
 			}

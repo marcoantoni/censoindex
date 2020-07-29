@@ -16,7 +16,8 @@ class Student extends Branch {
     function handle(DecisionTree $tree, Closure $next): DecisionTree {
         
         if (preg_match('/alun|estudante|matricula/', $tree->sentence)) {
-            $tree->query = Matricula::query();
+            $tree->setQuery(Matricula::query());
+            //$tree->query = Matricula::query();
             $tree->answer->data = array();
             $tree->answer->setResponseTable(Answer::STUDENT);
             

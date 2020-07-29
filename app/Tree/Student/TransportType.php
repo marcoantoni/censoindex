@@ -54,7 +54,7 @@ class TransportType extends Branch {
 
 		if ($condition){
 			if ($schoolsFound == 0 || $schoolsFound == 1){
-				$tree->addCondition($condition);
+				$tree->setQuery($tree->getQuery()->where($condition['field'], $condition['value']));
 			} else {
 				// Percorre o array $data da classe Answer
 				// O indíce [0] armazena o nome da escola enquanto o [1] armazena o objeto da classe Builder que representa o número de alunos

@@ -17,12 +17,14 @@ class School extends Branch {
 		
 		$cityId = session('CO_MUNICIPIO');	// essa variável é inicializada em app\Tree\Location.php
 		$school = null;
+		$schoolId = null;
 		$schoolsFound = 0;
 		$condition = null;
 		$no_entidade = '';	// escrito assim pois se refere ao atribudo do banco de dados
 
 		// Inicializa as variáveis de sessão com valores default
 		session(['NO_ENTIDADE' => false]);
+		session(['CO_ENTIDADE' => false]);
 		session(['schoolsFound' => 0]);
 
 		foreach ($tree->getEntityies() as $entity) {
@@ -37,12 +39,8 @@ class School extends Branch {
 				
 				if ($school){
 					$no_entidade = $school['NO_ENTIDADE'];
-					$condition = array(
-						'field' => 'CO_ENTIDADE',
-						'operator' => '=',
-						'value' => $school['CO_ENTIDADE']
-					);
-				
+					$schoolId = $school['CO_ENTIDADE'];
+										
 					$builder = Matricula::where('CO_ENTIDADE', $school['CO_ENTIDADE'] );
 					$arrData = array($no_entidade, $builder);
 					$tree->answer->data[] = $arrData;
@@ -53,7 +51,8 @@ class School extends Branch {
 
 		if ($schoolsFound == 1){
 			session(['NO_ENTIDADE' => $no_entidade ]);
-			$tree->addCondition($condition);
+			session(['CO_ENTIDADE' => $schoolId ]);
+			$tree->setQuery($tree->getQuery()->where('CO_ENTIDADE', $schoolId));
 		}
 
 		session(['schoolsFound' => $schoolsFound]);

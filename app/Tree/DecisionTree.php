@@ -68,11 +68,13 @@ class DecisionTree {
                     ->through([
                         Student::class,
                     ])->thenReturn();
+                    break;
             } else  if (preg_match('/escola|instituto|colegio/', $token)){
                 app(Pipeline::class)
                     ->send($this)
                     ->through([School::class])
                     ->thenReturn();
+                    break;
             } else  if (preg_match('/curso/', $token)){
                 app(Pipeline::class)
                     ->send($this)
@@ -80,6 +82,7 @@ class DecisionTree {
                     ->thenReturn();
                 $questionIsCourse = true;
                 $this->answer->setResponseTable(Answer::COURSE);
+                break;
             }            
         }
 
