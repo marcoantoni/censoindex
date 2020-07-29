@@ -6,7 +6,7 @@ use App\Escola;
 use App\Matricula;
 use App\Tree\Answer;
 use App\Tree\Location;
-use App\Tree\Course;
+use App\Tree\Course\Course;
 use App\Tree\School\School;
 use App\Tree\Student\Student;
 use Google\Cloud\Language\LanguageClient;
@@ -59,27 +59,35 @@ class DecisionTree {
         $questionIsCourse = false;
         app(Pipeline::class)->send($this)->through([Location::class])->thenReturn();
         
-        if (preg_match('/alun|estudante|matricula/', $this->sentence)) {
-            app(Pipeline::class)
-                ->send($this)
-                ->through([
-                    Student::class,
-                ])->thenReturn();
-        } else  if (preg_match('/escola|instituto|matricula/', $this->sentence)){
-            app(Pipeline::class)->send($this)->through([School::class])->thenReturn();
-        } else  if (preg_match('/curso/', $this->sentence)){
-            app(Pipeline::class)->send($this)->through([Course::class])->thenReturn();
-            $questionIsCourse = true;
+        // Percorre os tokens para maperar em qual tabela a pergunta está se relacionando
+        foreach ($this->tokens as $key => $token) {
+            
+            if (preg_match('/alun|estudante|matricula/', $token)) {
+                app(Pipeline::class)
+                    ->send($this)
+                    ->through([
+                        Student::class,
+                    ])->thenReturn();
+            } else  if (preg_match('/escola|instituto|colegio/', $token)){
+                app(Pipeline::class)
+                    ->send($this)
+                    ->through([School::class])
+                    ->thenReturn();
+            } else  if (preg_match('/curso/', $token)){
+                app(Pipeline::class)
+                    ->send($this)
+                    ->through([Course::class])
+                    ->thenReturn();
+                $questionIsCourse = true;
+                $this->answer->setResponseTable(Answer::COURSE);
+            }            
         }
 
         if (! $questionIsCourse) {
             foreach ($this->conditions as $key => $condition) {
                 $this->query = $this->query->where($condition['field'], $condition['operator'], $condition['value']);
             }
-        } else {    
-            $this->answer->setResponseTable(Answer::COURSE);
-        }
-
+        } 
         // Se o primeiro token tiver o radical quant, a resposta é numérica
         if (preg_match('/quant/', $this->tokens[0])) {
             $this->answer->setResponseType(Answer::NUMBER);
