@@ -4,6 +4,7 @@ namespace App\Tree\Course;
 
 use App\Curso;
 use App\Matricula;
+use App\Tree\Answer;
 use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use App\Tree\Student\School;
@@ -17,8 +18,11 @@ class Course extends Branch {
 	function handle(DecisionTree $tree, Closure $next): DecisionTree {
 
 		$cityId = session('CO_MUNICIPIO');	// essa variável é inicializada em app\Tree\Location.php
-
 		$tree->setQuery(Curso::query());
+		$tree->answer->addUserMessage(
+			Answer::WARNING, 
+			'Esses dados são apenas de cursos <b>Técnicos</b>'
+		);
 
 		// Vai para o App\Tree\Student\School para verificar se a pergunta possui uma escola
         app(Pipeline::class)

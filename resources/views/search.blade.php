@@ -4,7 +4,7 @@
   <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
     <img src="{{ url('images/5bcb9feeaa45161a29590148df90a654.jpg') }}">
     <h1 class="display-4">CensoIndex</h1>
-    <p class="lead">Faça uma pergunta referente aos dados educacionais que tentaremos responder</p>
+    <p class="lead">Faça uma pergunta referente aos dados do Censo Escolar que tentarei responder</p>
   </div>
   {!! Form::open([
     'route' => 'search.store',

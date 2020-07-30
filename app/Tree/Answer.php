@@ -14,6 +14,9 @@ class Answer {
     public const STUDENT = 3;
     public const COURSE = 4;
 
+    /* Tipo da mensagem do usuário */
+    public const ERROR = 'error';
+    public const WARNING = 'warning';
 
     /* Tipo da resposta */
     private $responseType;
@@ -21,11 +24,13 @@ class Answer {
 
     public $data;
     public $statistics;
-    private $inDomain;
+
+    private $userMessage;
 
     public function __construct(){
+        $this->userMessage = array();
         $this->statistics = array();
-        $this->inDomain = false; // Por padrão a pergunta é aceita
+        session(['inDomain' => false]); // A pergunta não está no domínio permitido
     }
 
     public function getResponseType(){
@@ -52,11 +57,11 @@ class Answer {
         $this->$data = $data;
     }
 
-    public function getDomain(){
-        return $this->inDomain;
+    public function addUserMessage(string $level, string $msg) {
+        $this->userMessage[$level] = $msg . '<br>';    
     }
 
-    public function setDomain(bool $inDomain) {
-        $this->inDomain = $inDomain;
-    }  
+    public function getUserMessage () {
+        return $this->userMessage;
+    }
 }

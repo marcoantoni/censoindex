@@ -68,21 +68,21 @@ class DecisionTree {
                     ->through([
                         Student::class,
                     ])->thenReturn();
-                    $this->answer->setDomain(true);
+                    session(['inDomain' => true]);
                     break;
             } else  if (preg_match('/escola|instituto|colegio/', $token)){
                 app(Pipeline::class)
                     ->send($this)
                     ->through([School::class])
                     ->thenReturn();
-                    $this->answer->setDomain(true);
+                    session(['inDomain' => true]);
                     break;
             } else  if (preg_match('/curso/', $token)){
                 app(Pipeline::class)
                     ->send($this)
                     ->through([Course::class])
                     ->thenReturn();
-                $this->answer->setDomain(true);
+                session(['inDomain' => true]);
                 $questionIsCourse = true;
                 $this->answer->setResponseTable(Answer::COURSE);
                 break;
@@ -90,7 +90,11 @@ class DecisionTree {
         }
 
         // A pergunta não está dentro do domínio aceito
-        if ($this->answer->getDomain() == false){
+        if (session('inDomain') == false){
+            $this->answer->addUserMessage(
+                Answer::ERROR, 
+                "Desculpe, mas não entendi sua pergunta. Só sei responder o que está relacionado à <b>escolas, alunos ou cursos técnicos"
+            );
             return $this->answer; 
         }
 
@@ -110,6 +114,11 @@ class DecisionTree {
 
         } else {
             $this->response = $this->query->get();
+            $results = count($this->response);
+            $this->answer->addUserMessage(
+                Answer::WARNING, 
+                "Sua pesquisa retornou <b>$results</b> resultados"
+            );
         }
         return $this->answer;
     }
@@ -240,4 +249,6 @@ class DecisionTree {
         session(['messageCourse' => false ]);
         session(['messageTransport' => false ]);
     }
+
+
 }

@@ -16,38 +16,27 @@
     </div>
   {{ Form::close() }}
 
-  @if ($inDomain == false)
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      <strong>Erro</strong> Não entendi sua pergunta. Só sei responder o que está relacionado à <b>escolas, cursos técnicos ou alunos</b>.
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-  @else
-    {{-- Quanto a resposta é em lista, faz a contagem para dar os avisos ao usuário --}}
+   
+  @foreach ($userMessage as $key => $message)
+    @if ($key == Answer::ERROR)
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Erro</strong> {!! $message !!}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    @else
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Aviso</strong> {!! $message !!}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    @endif
+  @endforeach
+  
+  @if (session('inDomain'))
     @if ($responseType == Answer::LIST)
-      @php
-        $count = $data->count();
-      @endphp
-      
-      @if ($count > 100) 
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          <strong>Aviso</strong> Sua pesquisa retornou {{ $count }} resultados
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      @elseif ($count == 0) 
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>Erro</strong> Sua pesquisa não retornou nenhum resultado. Podem ter acontecido três coisas <br>
-                  A resposta está certa e é mesmo <b>zero</b></br>
-                  Não consegui entender sua pergunta.Tente escrever o nome da cidade e a UF do seguinte com maiúsculas. Ex: <b>Porto Alegre/RS</b></br>
-                  Talvez eu não tenho essa informação no momento </br>
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      @endif
       {{-- Visualização em lista. Testa se resposta é relacionada a escola --}}
       @if ($responseTable == Answer::SCHOOL)
         <table class="table table-striped">
@@ -59,7 +48,16 @@
           <tbody>
             @foreach ($data as $value)
               <tr>
-                <td>{{ $value->NO_ENTIDADE }}</td>
+                <td>
+                  {{ $value->NO_ENTIDADE }}
+                  @if ($value->TP_SITUACAO_FUNCIONAMENTO == 2)
+                    <span class="badge badge-warning">Paralizada</span>
+                  @elseif ($value->TP_SITUACAO_FUNCIONAMENTO == 4)
+                    <span class="badge badge-warning">Extinta</span>
+                  @elseif ($value->TP_SITUACAO_FUNCIONAMENTO == 3)
+                    <span class="badge badge-danger">Extinta em 2019</span>
+                  @endif 
+                </td>
               </tr>     
             @endforeach
           </tbody>
@@ -141,7 +139,8 @@
         @endif
       </p>
     @endif
-  @endif {{-- $inDomain == false --}}
+  @endif {{--inDomain--}}
+  
 
   <h1>Debug</h1>
   Escola {{ session('NO_ENTIDADE') }} <br>

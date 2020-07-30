@@ -61,7 +61,7 @@ class SearchController extends Controller {
             'responseTable' => $answer->getResponseTable(),
             'stats' => $answer->statistics,
             'schoolsList'   => $answer->data,
-            'inDomain'  => $answer->getDomain()
+            'userMessage' => $answer->getUserMessage()
         ]);
     }
 
