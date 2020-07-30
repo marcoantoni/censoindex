@@ -84,7 +84,6 @@ class DecisionTree {
                     ->thenReturn();
                 session(['inDomain' => true]);
                 $questionIsCourse = true;
-                $this->answer->setResponseTable(Answer::COURSE);
                 break;
             }           
         }
