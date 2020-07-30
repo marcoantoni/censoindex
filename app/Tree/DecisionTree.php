@@ -30,7 +30,7 @@ class DecisionTree {
     private $annotation;
     private $conditions = [];
     private $entityies;
-    public $query;
+    private $query;
     public $response;
     public $sentence;
     private $tokens;
@@ -51,6 +51,7 @@ class DecisionTree {
         // Por padrão a resposta se refere a lista de escolas. 
         $this->answer->setResponseTable(Answer::SCHOOL);
         $this->answer->setResponseType(Answer::LIST);
+        $this->defaultState();
     }
 
     public function process() {
@@ -225,5 +226,18 @@ class DecisionTree {
 
     public function setQuery($query){
         $this->query = $query;
+    }
+
+    // Inicializa todas as variáveis de sessão com valores default
+    private function defaultState(){
+        session(['CO_MUNICIPIO' => false ]);
+        session(['NOME_MUNICIPIO' => false ]);
+        session(['CO_UF' => false ]);
+        session(['NO_UF' => false ]);
+        session(['CO_ENTIDADE' => false]);
+        session(['NO_ENTIDADE' => false]);
+        session(['schoolsFound' => 0]);
+        session(['messageCourse' => false ]);
+        session(['messageTransport' => false ]);
     }
 }

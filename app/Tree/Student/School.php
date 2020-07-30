@@ -19,13 +19,7 @@ class School extends Branch {
 		$school = null;
 		$schoolId = null;
 		$schoolsFound = 0;
-		$condition = null;
 		$no_entidade = '';	// escrito assim pois se refere ao atribudo do banco de dados
-
-		// Inicializa as variáveis de sessão com valores default
-		session(['NO_ENTIDADE' => false]);
-		session(['CO_ENTIDADE' => false]);
-		session(['schoolsFound' => 0]);
 
 		foreach ($tree->getEntityies() as $entity) {
 

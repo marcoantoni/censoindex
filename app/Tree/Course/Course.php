@@ -39,7 +39,11 @@ class Course extends Branch {
 				->toArray();
 		}
 		
-		$tree->query = DB::table('cursos')->whereIn('CO_CURSO_EDUC_PROFISSIONAL', array_values($coursesId))->orderBy('NOME', 'ASC');
+		$tree->setQuery(
+			DB::table('cursos')
+				->whereIn('CO_CURSO_EDUC_PROFISSIONAL', array_values($coursesId))
+				->orderBy('NOME', 'ASC')
+		);
 		
 		return $next($tree);
 	}	

@@ -26,13 +26,6 @@ class Location extends Branch {
         // variavel de controle para saber se foi especificado uma localizacao (uf) dentro da busca.
         // Se nao encontrou uma uf, e preciso buscar a localizacao
         $ufPresent = false;
-
-        // Inicializa as variáveis de sessão com valores default
-        session(['CO_MUNICIPIO' => false ]);
-        session(['NOME_MUNICIPIO' => false ]);
-        session(['CO_UF' => false ]);
-        session(['NO_UF' => false ]);
-
         
         /* No melhor caso, foi digitado a cidade e UF. Primeiro procura a UF */
         foreach ($tree->getEntityies() as $entity) {
