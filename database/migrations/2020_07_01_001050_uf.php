@@ -17,6 +17,7 @@ class Uf extends Migration
             $table->integer('co_uf');
             $table->string('no_estado');
             $table->char('no_uf', 2);
+            $table->primary('co_uf');
         });
     }
 
