@@ -58,7 +58,12 @@ class Answer {
     }
 
     public function addUserMessage(string $level, string $msg) {
-        $this->userMessage[$level] = $msg . '<br>';    
+        if (isset($this->userMessage[$level])){
+           $this->userMessage[$level] = $this->userMessage[$level] . $msg . '<br>';
+        }
+        else {
+           $this->userMessage[$level] = $msg . '<br>';
+        }
     }
 
     public function getUserMessage () {
