@@ -49,7 +49,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Escolas</th>
+              <th>Escolas {{session('courseName') ? " que ofertam o curso técnico em " . session('courseName') : " "}}</th>
             </tr>
           </thead>
           <tbody>
