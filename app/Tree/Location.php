@@ -48,17 +48,15 @@ class Location extends Branch {
         // procura o municipio
         foreach ($tree->getEntityies() as $key => $entity) {
             $entityName = $entity->getName();
+            $query = Municipio::where('uf', '=', $uf)->where('nome', 'like', "%$entityName%")->first();
 
-            $query = Municipio::where('uf', '=', $uf)->where('nome', 'like', '%'.$entityName.'%')->first();
             // se a consulta retornou um resultado, testa se a expressao está presente na sentenca
             if ($query) {
-                    $search = $query['NOME'];
-                if(preg_match("/{$search}/i", $tree->sentence)) {
-                    $cityId = $query['CO_MUNICIPIO'];
-                    session(['CO_MUNICIPIO' => $cityId ]);
-                    session(['NOME_MUNICIPIO' => $query['NOME'] ]);
-                    break;
-                }
+                $search = $query['NOME'];
+                $cityId = $query['CO_MUNICIPIO'];
+                session(['CO_MUNICIPIO' => $cityId ]);
+                session(['NOME_MUNICIPIO' => $query['NOME'] ]);
+                break;
             }
         }
         
