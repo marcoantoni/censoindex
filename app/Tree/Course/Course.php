@@ -19,6 +19,7 @@ class Course extends Branch {
 	function handle(DecisionTree $tree, Closure $next): DecisionTree {
 
 		$cityId = session('CO_MUNICIPIO');	// essa variável é inicializada em app\Tree\Location.php
+		$courseName = null;
 		/* 
 		 * Responde sobre quais escolas ofertam um curso tecnico. Nesse tipo de pergunta há o pronome interrogativo "onde".
 		 * Procura pelo expressão "tecnico" na pergunta e realiza as consultas na tabela Cursos até encontrar um curso
@@ -31,7 +32,7 @@ class Course extends Branch {
 				$course = Curso::where('NOME', $tokens[$key])->first();
 
 				if ($course) {
-					$messageCourse = $course['NOME'];
+					$courseName = $course['NOME'];
 					
 					$SchoolsId = Matricula::distinct('CO_ENTIDADE')
 						->where('CO_CURSO_EDUC_PROFISSIONAL', $course['CO_CURSO_EDUC_PROFISSIONAL'] )
@@ -45,14 +46,7 @@ class Course extends Branch {
 							->whereIn('CO_ENTIDADE', array_values($SchoolsId))
 							->orderBy('NO_ENTIDADE', 'ASC')
 					);
-					
-					$tree->answer->addUserMessage(
-						Answer::WARNING, 
-						"Essas escolas ofertam o curso técnico em <b>$messageCourse</b> na cidade de " . session('NOME_MUNICIPIO')
-					);
-
 					$tree->answer->setResponseTable(Answer::SCHOOL);
-					return $next($tree);
 				}
 			}
 		// Lista os cursos ofertados em uma cidade/escola
@@ -88,7 +82,7 @@ class Course extends Branch {
 					->orderBy('NOME', 'ASC')
 			);
 		}
-		
+		session(['courseName' => $courseName]);
 		return $next($tree);
 	}	
 }

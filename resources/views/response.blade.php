@@ -18,16 +18,23 @@
 
    
   @foreach ($userMessage as $key => $message)
-    @if ($key == Answer::ERROR)
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <strong>Erro</strong> {!! $message !!}
+    @if ($key == Answer::INFO)
+     <div class="alert alert-info alert-dismissible fade show" role="alert">
+        {!! $message !!}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    @else
+    @elseif ($key == Answer::WARNING)
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>Aviso</strong> {!! $message !!}
+        {!! $message !!}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    @else ($key == Answer::ERROR)
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {!! $message !!}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -42,7 +49,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Escola</th>
+              <th>Escolas</th>
             </tr>
           </thead>
           <tbody>
@@ -134,8 +141,8 @@
         @endif
 
         {{-- Apresenta a menssagem caso a pesquisa busque informações sobre o curso --}}
-        @if (session('messageCourse'))
-          no curso técnico em {{ session('messageCourse') }}
+        @if (session('courseName'))
+          no curso técnico em {{ session('courseName') }}
         @endif
       </p>
     @endif
@@ -147,7 +154,7 @@
   Cidade {{ session('NOME_MUNICIPIO') }} <br>
   Estado {{ session('NO_UF') }} <br>
   Transporte {{ session('messageTransport') }} <br>
-  Curso {{ session('messageCourse') }} <br>
+  Curso {{ session('courseName') }} <br>
 
   <!-- Modal debug-->
   <div class="modal fade" id="modalDebug" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -17,6 +17,7 @@ class Answer {
     /* Tipo da mensagem do usuário */
     public const ERROR = 'error';
     public const WARNING = 'warning';
+    public const INFO = 'info';
 
     /* Tipo da resposta */
     private $responseType;
@@ -60,8 +61,7 @@ class Answer {
     public function addUserMessage(string $level, string $msg) {
         if (isset($this->userMessage[$level])){
            $this->userMessage[$level] = $this->userMessage[$level] . $msg . '<br>';
-        }
-        else {
+        } else {
            $this->userMessage[$level] = $msg . '<br>';
         }
     }
@@ -69,4 +69,43 @@ class Answer {
     public function getUserMessage () {
         return $this->userMessage;
     }
+
+    // Gera as mensagens que serão apresentadas para o usuario com base no número de resultos da consulta
+    public function generateMessages(int $numResults) {
+        $msg = "Sua pesquisa retornou <b>$numResults</b> resultados" . (session('NOME_MUNICIPIO') ? " para a cidade de " . session('NOME_MUNICIPIO') : " ");
+        
+        // se a pesquisa não retornou nenhum resultado, verifica se ela está relacionada a cursos       
+        if ($numResults == 0){
+            // se a varíavel estiver como false ela não foi alterada
+            if  (session('courseName') == false) {
+                $this->addUserMessage(
+                    Answer::ERROR, 
+                    "Sua pesquisa não retornou nenhum resultado. Tente reescrever sua pergunta usando letras maiúsculas no nome da cidade"
+                );
+            // se a varíavel estiver como 'none' ela foi alterada em app\Tree\Course
+            } else if (session('courseName') == null) {
+                $this->addUserMessage(
+                    Answer::INFO, 
+                    session('NOME_MUNICIPIO') . ' não oferta nenhum curso técnico'
+                );
+            // se a varíavel estiver for diferente de 'none' ela foi alterada em app\Tree\Course e encontrou um curso
+            } else if (session('courseName')) {
+                $this->addUserMessage(
+                    Answer::INFO, 
+                    'O curso técnico em <b>'.session('courseName').'</b> não é ofertado na cidade de ' . session('NOME_MUNICIPIO')
+                );
+            }
+        } else if ($numResults > 100) {
+            $this->addUserMessage(
+                Answer::WARNING, 
+                $msg
+            );   
+        } else {
+            $this->addUserMessage(
+                Answer::INFO, 
+                $msg
+            );
+        }
+    }
+
 }

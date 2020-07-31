@@ -34,7 +34,7 @@ class Course extends Branch {
 			}
 		}
 
-		session(['messageCourse' => $messageCourse ]);
+		session(['courseName' => $messageCourse ]);
 
 		return $next($tree);
 

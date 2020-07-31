@@ -113,11 +113,7 @@ class DecisionTree {
 
         } else {
             $this->response = $this->query->get();
-            $results = count($this->response);
-            $this->answer->addUserMessage(
-                Answer::WARNING, 
-                "Sua pesquisa retornou <b>$results</b> resultados"
-            );
+            $this->answer->generateMessages(count($this->response));
         }
         return $this->answer;
     }
@@ -245,9 +241,12 @@ class DecisionTree {
         session(['CO_ENTIDADE' => false]);
         session(['NO_ENTIDADE' => false]);
         session(['schoolsFound' => 0]);
-        session(['messageCourse' => false ]);
+        /* A variavel courseName pode assumir 3 valores
+         * false é o valor padrão
+         * null quando o processamento for para a classe App\Tree\Course\Course 
+         * string contendo o nome do curso quando se referir a algum curso
+        */
+        session(['courseName' => false ]);
         session(['messageTransport' => false ]);
     }
-
-
 }
