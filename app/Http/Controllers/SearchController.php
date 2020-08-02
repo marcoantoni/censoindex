@@ -59,7 +59,7 @@ class SearchController extends Controller {
             'debug'     => $analyse,
             'responseType' => $answer->getResponseType(),
             'responseTable' => $answer->getResponseTable(),
-            'stats' => $answer->statistics,
+            'stats' => $answer->statistics->stats,
             'schoolsList'   => $answer->data,
             'userMessage' => $answer->getUserMessage()
         ]);

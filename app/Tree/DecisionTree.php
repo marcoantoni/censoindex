@@ -185,10 +185,10 @@ class DecisionTree {
     }
 
     public function setEntityies($entityies){
-        //$this->entityies = array();
+      //  $this->entityies = array();
         $this->entityies = $entityies;
-        foreach ($entityies as $key => $value) {
-            print('setEntidade: ' . $value->getName() );
+       foreach ($entityies as $key => $value) {
+            print('<br>setEntidade: ' . $value->getName() );
         }
     }
 

@@ -48,21 +48,21 @@ class Location extends Branch {
         // procura o municipio
         foreach ($tree->getEntityies() as $key => $entity) {
             $entityName = $entity->getName();
-            $query = Municipio::where('uf', '=', $uf)->where('nome', 'like', "%$entityName%")->first();
+            $query = Municipio::where('uf', '=', $uf)->where('nome', 'like', "$entityName")->first();
 
-            // se a consulta retornou um resultado, testa se a expressao está presente na sentenca
+            // se a consulta retornou um resultado
             if ($query) {
-                $search = $query['NOME'];
                 $cityId = $query['CO_MUNICIPIO'];
                 session(['CO_MUNICIPIO' => $cityId ]);
                 session(['NOME_MUNICIPIO' => $query['NOME'] ]);
+                $uf = $query['UF'];
                 break;
             }
         }
         
         // Busca e armazena o CO_UF e o NO_UF na sessão
         // Pode ser necessário para buscar estatistícas do estado e necessário para apresentação da resposta personalizada das perguntas 
-        $reseultSet = UF::where('NO_UF', '=', $uf)->first();
+        $reseultSet = UF::where('no_uf', '=', $uf)->first();
         session(['CO_UF' => $reseultSet['co_uf'] ]);
         session(['NO_UF' => $reseultSet['no_uf'] ]);
 

@@ -64,9 +64,24 @@ class TransportType extends Branch {
 					$value[1]->where($condition['field'], $condition['operator'], $condition['value']);
 				}
 			}
+
+			// Adiciona a condição do transporte ao objeto builder para para gerar as estatísticas do meio de transporte utilizado
+			if (session('schoolsFound') > 0){
+				$tree->answer->statistics->query['city']['cache']->where($condition['field'], $condition['operator'], $condition['value']);
+				$tree->answer->statistics->query['city']['nocache']->where($condition['field'], $condition['operator'], $condition['value']);
+			}
+
+			if (session('CO_MUNICIPIO')) {
+				$tree->answer->statistics->query['state']['cache']->where($condition['field'], $condition['operator'], $condition['value']);
+				$tree->answer->statistics->query['state']['nocache']->where($condition['field'], $condition['operator'], $condition['value']);
+			}
+
+			$tree->answer->statistics->fields[$condition['field']] = $condition['value'];
 		}
-	
+
 		session(['messageTransport' => $messageTransport ]);
+
+		$tree->answer->statistics->execute();
 
 		return $next($tree);
 	

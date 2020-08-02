@@ -16,6 +16,7 @@ class School extends Branch {
 	function handle(DecisionTree $tree, Closure $next): DecisionTree {
 		
 		$cityId = session('CO_MUNICIPIO');	// essa variável é inicializada em app\Tree\Location.php
+		$stateId = session('CO_UF');	// essa variável é inicializada em app\Tree\Location.php
 		$school = null;
 		$schoolId = null;
 		$schoolsFound = 0;
@@ -29,7 +30,7 @@ class School extends Branch {
 			// Evita que a pesquisa por "quais escolas tem em Rolante/RS" retorne o ifRS devido ao like na consulta
 			if ((strcasecmp(session('NOME_MUNICIPIO'), $entityName) != 0) && (strcasecmp(session('NO_UF'), $entityName) != 0) ) {
 			
-				$school = Escola::where('CO_MUNICIPIO', $cityId)->where('NO_ENTIDADE', 'like', '%'.$entityName.'%')->first();
+				$school = Escola::where('CO_MUNICIPIO', $cityId)->where('NO_ENTIDADE', 'like', "%$entityName%")->first();
 				
 				if ($school){
 					$no_entidade = $school['NO_ENTIDADE'];
@@ -51,17 +52,8 @@ class School extends Branch {
 
 		session(['schoolsFound' => $schoolsFound]);
 
-		// Busca as estatistícas de matrículas da cidade e estado
-		// Se encontrou uma escola, busca as informacoes do município
-//		if ($school){
-//			$tree->answer->statistics['city'] = Matricula::where('CO_MUNICIPIO', $cityId)->count();
-//		} 
-
-		// Se não encontrou um município, a pesquisa esta sendo feita pelo estado
-		// Não e necessário as estatistícas do estado
-//		if (session('CO_MUNICIPIO')) {
-//			$tree->answer->statistics['state'] = Matricula::where('CO_UF', session('CO_UF') )->count();
-//		}
+		// Busca a quantidade de alunos da cidade/estado
+		$tree->answer->statistics->generate();
 
 		return $next($tree);
 	}

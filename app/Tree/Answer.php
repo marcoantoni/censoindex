@@ -2,6 +2,8 @@
 
 namespace App\Tree;
 
+use App\Tree\Statistics;
+
 class Answer {
 	/* Tipo da resposta */
 	public const NUMBER = 0;
@@ -30,7 +32,7 @@ class Answer {
 
     public function __construct(){
         $this->userMessage = array();
-        $this->statistics = array();
+        $this->statistics = new Statistics();
         session(['inDomain' => false]); // A pergunta não está no domínio permitido
     }
 
