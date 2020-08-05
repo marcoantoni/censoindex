@@ -55,9 +55,8 @@ class TransportType extends Branch {
 				// Percorre o array $data da classe Answer
 				// O indíce [0] armazena o nome da escola enquanto o [1] armazena o objeto da classe Builder que representa o número de alunos
 				// Basta adicionar a restrição a consulta 
-				foreach ($tree->answer->data as $key => $value) {
-					//print_r($value);
-					$value[1]->where($field, $value);
+				foreach ($tree->answer->data as $key => $query) {
+					$query[1]->where($field, '=', $value);
 				}
 			}
 

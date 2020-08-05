@@ -29,7 +29,6 @@ class School extends Branch {
 			// Ignore a entidade cujo nome é o mesmo que o municipio
 			// Evita que a pesquisa por "quais escolas tem em Rolante/RS" retorne o ifRS devido ao like na consulta
 			if ((strcasecmp(session('NOME_MUNICIPIO'), $entityName) != 0) && (strcasecmp(session('NO_UF'), $entityName) != 0) ) {
-			
 				$school = Escola::where('CO_MUNICIPIO', $cityId)->where('NO_ENTIDADE', 'like', "%$entityName%")->first();
 				
 				if ($school){

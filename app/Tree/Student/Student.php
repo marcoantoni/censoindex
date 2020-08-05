@@ -16,19 +16,21 @@ class Student extends Branch {
     function handle(DecisionTree $tree, Closure $next): DecisionTree {
         
         $tree->setQuery(Matricula::query());
-        $tree->answer->data = array();
+        $tree->answer->data = array();  // define como array pois a resposta pode retornar mais de uma escola
         $tree->answer->setResponseTable(Answer::STUDENT);
         $tree->answer->addUserMessage(
-                Answer::WARNING, 
-                'Esses dados não incluem alunos de nível <b>Superior</b>'
-            );
+            Answer::WARNING, 
+            'Esses dados não incluem alunos de nível <b>Superior</b>'
+        );
 
-        return app(Pipeline::class)
+        app(Pipeline::class)
             ->send($tree)
             ->through([
                 School::class,
                 TransportType::class,
                 Course::class,
-            ])->thenReturn();       
+            ])->thenReturn();    
+
+        return $tree;   
     }
 }

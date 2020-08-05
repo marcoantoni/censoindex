@@ -54,13 +54,12 @@ class SearchController extends Controller {
         $answer = $decision_tree->process();
         
         return view ('response')->with([
-            'data'   => $decision_tree->response,
+            'data'   => $answer->data,
             'sentence'  => $decision_tree->sentence,
             'debug'     => $analyse,
             'responseType' => $answer->getResponseType(),
             'responseTable' => $answer->getResponseTable(),
             'stats' => $answer->statistics->stats,
-            'schoolsList'   => $answer->data,
             'userMessage' => $answer->getUserMessage()
         ]);
     }

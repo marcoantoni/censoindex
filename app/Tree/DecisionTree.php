@@ -31,7 +31,6 @@ class DecisionTree {
     private $conditions = [];
     private $entityies;
     private $query;
-    public $response;
     public $sentence;
     private $tokens;
 
@@ -105,15 +104,16 @@ class DecisionTree {
         // Se o primeiro token tiver o radical quant, a resposta é numérica
         if (preg_match('/quant/', $this->tokens[0])) {
             $this->answer->setResponseType(Answer::NUMBER);
-            $this->response = $this->query->count();
             
             if (session('schoolsFound') > 1) {
                 $this->answer->setResponseType(Answer::NUMBERLIST);
+            } else {
+                $this->answer->data = $this->query->count();
             }
 
         } else {
-            $this->response = $this->query->get();
-            $this->answer->generateMessages(count($this->response));
+            $this->answer->data = $this->query->get();
+            $this->answer->generateMessages(count($this->answer->data));
         }
         return $this->answer;
     }
