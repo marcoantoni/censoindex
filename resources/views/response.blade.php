@@ -158,71 +158,14 @@
         @if (session('courseName'))
           no curso técnico em {{ session('courseName') }}
         @endif
+
+        {{-- Apresenta a menssagem caso a pesquisa busque informações sobre o curso --}}
+        @if (session('messagePhase'))
+          {{ session('messagePhase') }}
+        @endif
       </p>
     @endif
-    @if (session('NOME_MUNICIPIO') != false)
-      <script type="text/javascript">
-        labels.push('{{ session('NOME_MUNICIPIO') }}');
-        data.push({{ $stats['city'] }});
-      </script>
-    @endif
-    <canvas id="chartCity" style="width=75px; height=75px;"></canvas>
-    <canvas id="chartState" style="width=75px; height=75px;"></canvas>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script>
-      var ctx = document.getElementById('chartCity');
-      var myChart = new Chart(ctx, {
-          type: 'pie',
-          data: {
-              labels: labels,
-              datasets: [{
-                  label: 'No ifs',
-                  data: data,
-                  backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                  ],
-                  borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                  ],
-                  borderWidth: 1
-              }]
-          }
-      });
-      
-      /* https://www.chartjs.org/docs/latest/developers/updates.html */
-      function addData(chart, label, data) {
-        chart.data.labels.push(label);
-        chart.data.datasets.forEach((dataset) => {
-            dataset.data.push(data);
-        });
-        chart.update();
-      }
-
-      @if (session('messageTransport'))
-      $.ajax({
-        url: 'http://127.0.0.1:8000/stats/43/4316006',
-        type: 'GET',
-        
-        success: function(data) {
-          addData(myChart, 'Total de alunos', data.city);
-            alert('sucess' + data.city);
-        }
-      });
-      @endif
-    
-
-    </script>
+   
 
     
   @endif {{--inDomain--}}
@@ -234,6 +177,7 @@
   Estado {{ session('NO_UF') }} <br>
   Transporte {{ session('messageTransport') }} <br>
   Curso {{ session('courseName') }} <br>
+  Fase {{ session('messagePhase') }} <br>
 
   <!-- Modal debug-->
   <div class="modal fade" id="modalDebug" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

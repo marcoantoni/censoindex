@@ -8,8 +8,8 @@ use App\Tree\Answer;
 use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use Closure;
+use Google\Cloud\Language\V1\Entity\Type as EntityType;
 use Illuminate\Pipeline\Pipeline;
-
 
 class Student extends Branch {
 
@@ -26,10 +26,11 @@ class Student extends Branch {
         app(Pipeline::class)
             ->send($tree)
             ->through([
+                Phases::class,
                 School::class,
                 TransportType::class,
                 Course::class,
-            ])->thenReturn();    
+            ])->thenReturn();                
 
         return $tree;   
     }

@@ -26,9 +26,22 @@ class School extends Branch {
 
 			$entityName = $entity->getName();
 			
-			// Ignore a entidade cujo nome é o mesmo que o municipio
-			// Evita que a pesquisa por "quais escolas tem em Rolante/RS" retorne o ifRS devido ao like na consulta
-			if ((strcasecmp(session('NOME_MUNICIPIO'), $entityName) != 0) && (strcasecmp(session('NO_UF'), $entityName) != 0) ) {
+			/* Ignore a entidade cujo nome é o mesmo que o municipio.
+			 * Evita que a pesquisa por "quais escolas tem em Rolante/RS" retorne o ifRS devido ao like na consulta.
+			 * Ignora as palavras creche, infantil, ensino, fundamental, médio pois nesse aplicação, ao pesquisar escolas,
+			 * pode-se considerar essas palavras como stop words.
+			*/
+			if ((strcasecmp(session('NOME_MUNICIPIO'), $entityName) != 0) && 
+				(strcasecmp(session('NO_UF'), $entityName) != 0) && 
+				(strcasecmp('creche', $tree->removeAccents($entityName)) != 0) && 
+				(strcasecmp('escola', $tree->removeAccents($entityName)) != 0) && 
+				(strcasecmp('ensino', $tree->removeAccents($entityName)) != 0) && 
+				(strcasecmp('educacao infantil', $tree->removeAccents($entityName)) != 0) && 
+				(strcasecmp('ensino fundamental', $tree->removeAccents($entityName)) != 0) && 
+				(strcasecmp('ensino medio', $tree->removeAccents($entityName)) != 0) && 
+				(strcasecmp('fundamental', $tree->removeAccents($entityName)) != 0) &&
+				(strcasecmp('infantil', $tree->removeAccents($entityName)) != 0) ){
+
 				$school = Escola::where('CO_MUNICIPIO', $cityId)->where('NO_ENTIDADE', 'like', "%$entityName%")->first();
 				
 				if ($school){

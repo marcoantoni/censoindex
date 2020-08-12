@@ -215,7 +215,7 @@ class DecisionTree {
     *
     */
     public function removeStopWords(String $word){
-        $stopwords = array('a', 'o', 'as', 'os', 'de', 'que', 'do', 'em', 'para', 'é', 'dos', 'no');
+        $stopwords = array('a', 'o', 'as', 'os', 'de', 'que', 'do', 'em', 'para', 'é', 'dos', 'no', 'na');
         
         if (array_search($word, $stopwords))
             return false;
@@ -248,5 +248,10 @@ class DecisionTree {
         */
         session(['courseName' => false ]);
         session(['messageTransport' => false ]);
+        session(['messagePhase' => false ]);
+    }
+
+    public function removeAccents($string) {
+        return strtolower(trim(preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', htmlentities($string, ENT_QUOTES, 'UTF-8')), ' '));
     }
 }
