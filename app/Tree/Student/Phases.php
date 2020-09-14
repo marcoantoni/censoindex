@@ -35,7 +35,7 @@ class Phases extends Branch {
 		}		
 		
 		// pesquisa por EJA médio
-		if (preg_match('/eja/', $tree->sentence) && preg_match('/medio/', $tree->sentence)) {		
+		if (preg_match('/eja/', $tree->sentence) && preg_match('/m(e|é)dio/', $tree->sentence)) {		
 			$tree->setQuery($tree->getQuery()->where('TP_ETAPA_ENSINO', [71]));
 			$messagePhase = "no EJA - Ensino Médio";
 		}
@@ -59,10 +59,10 @@ class Phases extends Branch {
 					);
 					$messagePhase = "no ensino Fundamental";
 					break;
-				} else if (preg_match('/medio/', $tokens[$i])) {		
+				} else if (preg_match('/m(e|é)dio/', $tokens[$i])) {		
 					// códigos entre 25 e 28 correspondem ao ensino médio - regular e integrado
 					$tree->setQuery($tree->getQuery()
-						->whereBetween('TP_ETAPA_ENSINO', [25, 38])
+						->whereIn('TP_ETAPA_ENSINO', [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 64, 71, 74])
 					);
 					$messagePhase = "no ensino Médio";
 					break;
