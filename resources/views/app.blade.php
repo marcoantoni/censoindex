@@ -9,12 +9,8 @@
     <title>CensoIndex</title>
     <!-- Bootstrap core CSS -->
     <link href="https://getbootstrap.com/docs/4.5/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-   
-    <!-- Favicons -->
-    <link rel="apple-touch-icon" href="/docs/4.5/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" href="/docs/4.5/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/docs/4.5/assets/img/favicons/favicon.ico">
-    <meta name="theme-color" content="#563d7c">
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     
     <style>
       .bd-placeholder-img {
@@ -56,7 +52,6 @@
       </nav>
       @if (isset($debug))
         <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#modalDebug">Debug NLP</a>&nbsp;&nbsp;
-        <a class="btn btn-outline-danger" href="https://forms.gle/ZbR8h8D5APkvRBQf6">Problemas ou sugestões</a>
       @endif
     </div>
     <div class="container">
@@ -125,13 +120,14 @@
           </div>
           <div class="modal-body">
             Faça perguntas como se fossem dirigidas a outra pessoa. No momento, consigo responder essas perguntas :) <br>
-            <br><a href="#">Quais escolas federais tem em Santa Maria/RS</a> - consigo aplicar restrições de escolas particulares e publicas (municipais, estaduais e federais)
+            <br><a href="#">Quais escolas federais tem em Santa Maria/RS</a> - consigo aplicar restrições de escolas particulares e públicas (municipais, estaduais e federais)
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quais escolas particulares existem em Frederico Westphalen/RS</a>
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem na cidade de Rolante/RS</a>
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem na escola visconde de cairu em Santa Rosa/RS</a>
-            <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem em Rolante/RS que usam transporte publico</a>
+            <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem em Rolante/RS que usam transporte público</a>
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem no ifrs Rolante/RS no curso tecnico em informatica</a>
-            <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">Quais cursos tem na cidade de Taquara/RS</a>
+            <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quais cursos tem na cidade de Taquara/RS</a>
+            <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">onde tem o curso técnico em informática em Porto Alegre</a>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
@@ -140,7 +136,6 @@
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {

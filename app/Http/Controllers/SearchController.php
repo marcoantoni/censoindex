@@ -44,9 +44,9 @@ class SearchController extends Controller {
     
     public function store(Request $request) {
         /* Grava as perguntas no BD */;
-        $log = new Log();
-        $log->sentence = $request->input('search');
-        $log->save();
+        #$log = new Log();
+        #$log->sentence = $request->input('search');
+        #$log->save();
         // inicia o processamento
         $decision_tree = new DecisionTree($request->input('search'));
         $analyse = $decision_tree->analyze();

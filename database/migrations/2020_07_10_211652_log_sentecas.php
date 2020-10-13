@@ -15,6 +15,8 @@ class LogSentecas extends Migration
         Schema::create('log', function (Blueprint $table) {
             $table->increments('id');
             $table->char('sentence', 200);
+            $table->integer('correct');
+            $table->char('feedback', 1000);
             $table->timestamps();
         });
     }

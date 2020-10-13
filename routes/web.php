@@ -17,3 +17,14 @@ Route::resource('search', 'SearchController');
 Route::get('/', function () {
     return view('search');
 });
+
+Route::get('/stats/{idState}/{idCity?}', 'StatisticsController@getStatistics');
+
+Route::resource('school', 'SchoolController')->only([
+    'show'
+]);
+
+Route::resource('log', 'LogController')->only([
+    'store'
+]);
+Route::post('/log/storerightanswer', 'LogController@storeRightAnswer');
