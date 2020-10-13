@@ -28,3 +28,10 @@ Route::resource('log', 'LogController')->only([
     'store'
 ]);
 Route::post('/log/storerightanswer', 'LogController@storeRightAnswer');
+
+Route::get('/about', function () {
+    return view('about');
+});
+Route::get('/datasource', function () {
+    return view('datasource');
+});

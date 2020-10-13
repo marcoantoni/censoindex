@@ -13,6 +13,26 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     
     <style>
+      html {
+        font-size: 14px;
+      }
+      @media (min-width: 768px) {
+        html {
+          font-size: 16px;
+        }
+      }
+
+      .container {
+        max-width: 960px;
+      }
+
+      .pricing-header {
+        max-width: 700px;
+      }
+
+      .card-deck .card {
+        min-width: 220px;
+      }
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -39,16 +59,15 @@
         }
       }
     </style>
-    <!-- Custom styles for this template -->
-    <link href="https://getbootstrap.com/docs/4.5/examples/pricing/pricing.css" rel="stylesheet">
   </head>
   <body>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
       <h5 class="my-0 mr-md-auto font-weight-normal">PPGCP - UFSM</h5>
       <nav class="my-2 my-md-0 mr-md-3">
+        <a class="p-2 text-dark" href="/search">Início</a>
         <a class="p-2 text-dark" href="#" data-toggle="modal" data-target="#modalHelp">Ajuda</a>
-        <a class="p-2 text-dark" href="#">Sobre</a>
-        <a class="p-2 text-dark" href="#">Origem dos dados</a>
+        <a class="p-2 text-dark" href="/about">Sobre</a>
+        <a class="p-2 text-dark" href="/datasource">Origem dos dados</a>
       </nav>
       @if (isset($debug))
         <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#modalDebug">Debug NLP</a>&nbsp;&nbsp;
@@ -128,6 +147,7 @@
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem no ifrs Rolante/RS no curso tecnico em informatica</a>
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quais cursos tem na cidade de Taquara/RS</a>
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">onde tem o curso técnico em informática em Porto Alegre</a>
+            <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem na pré-escola em Santa Rosa/RS</a> - consigo aplicar restrições de (pré-escola, creches, ensino fundamental/médio, EJA fundamental/médio)
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
