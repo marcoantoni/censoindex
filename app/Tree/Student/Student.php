@@ -26,8 +26,8 @@ class Student extends Branch {
         app(Pipeline::class)
             ->send($tree)
             ->through([
-                Phases::class,
                 School::class,
+                Phases::class,
                 TransportType::class,
                 Course::class,
             ])->thenReturn();                
