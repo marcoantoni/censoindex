@@ -15,6 +15,7 @@ class Course extends Branch {
 		$tokens = $tree->getTokens();
 		$position = array_search('tecnico', $tokens);
 		$messageCourse = false;
+		$schoolsFound = session('schoolsFound');
 
 		if ($position) {
 			for ($i = $position+1; $i < count($tokens); $i++) {
@@ -22,13 +23,19 @@ class Course extends Branch {
 				$course = Curso::where('NOME', 'like', '%'.$tokens[$i].'%')->first();
 
 				if ($course) {
-					$condition = array(
-						'field' => 'CO_CURSO_EDUC_PROFISSIONAL',
-						'operator' => '=',
-						'value' => $course['CO_CURSO_EDUC_PROFISSIONAL']
-		        	);
-		        	$tree->setQuery($tree->getQuery()->where('CO_CURSO_EDUC_PROFISSIONAL', $course['CO_CURSO_EDUC_PROFISSIONAL']));
+
 		        	$messageCourse = $course['NOME'];
+
+		        	if ($schoolsFound == 0 || $schoolsFound == 1){
+		        		$tree->setQuery($tree->getQuery()->where('CO_CURSO_EDUC_PROFISSIONAL', $course['CO_CURSO_EDUC_PROFISSIONAL']));
+		        	} else {
+		        		// Percorre o array $data da classe Answer
+						// O indíce [0] armazena o nome da escola enquanto o [1] armazena o objeto da classe Builder que representa o número de alunos
+						// Basta adicionar a restrição a consulta 
+						foreach ($tree->answer->data as $key => $query) {
+							$query[1]->where('CO_CURSO_EDUC_PROFISSIONAL', $course['CO_CURSO_EDUC_PROFISSIONAL']);
+						}
+		        	}
 		        	break;
 				}
 			}

@@ -18,6 +18,7 @@ class Phases extends Branch {
 		$sentence = $tree->sentence;
 		$messagePhase = false;
 		$values = false;
+		$schoolsFound = session('schoolsFound');
 
 		if (preg_match('/cre(ch|x)e/', $tree->sentence)) {		
 			$values = [1];
@@ -70,7 +71,16 @@ class Phases extends Branch {
 		}
 
 		if ($values){
-			$tree->setQuery($tree->getQuery()->whereIn('TP_ETAPA_ENSINO', array_values($values)));
+			if ($schoolsFound == 0 || $schoolsFound == 1){
+				$tree->setQuery($tree->getQuery()->whereIn('TP_ETAPA_ENSINO', array_values($values)));
+			} else {
+				// Percorre o array $data da classe Answer
+				// O indíce [0] armazena o nome da escola enquanto o [1] armazena o objeto da classe Builder que representa o número de alunos
+				// Basta adicionar a restrição a consulta 
+				foreach ($tree->answer->data as $key => $query) {
+					$query[1]->whereIn('TP_ETAPA_ENSINO', array_values($values));
+				}
+			}
 			session(['messagePhase' => $messagePhase ]);
 		}
 

@@ -28,7 +28,7 @@ class Statistics {
     public function generate(){
     
         // Se encontrou há alguma escola, busca as informações do município
-        if (session('schoolsFound') >= 1){
+        if (session('schoolsFound') >= 0){
             $cityStats = array();   // cria um array de estatísticas para a cidade
             // query para buscar na tabela matriculas_cache
             $cityStats['cache'] = MatriculaCache::where('CO_MUNICIPIO', session('CO_MUNICIPIO'));
@@ -54,7 +54,7 @@ class Statistics {
     public function execute(){
         
         // Se encontrou há alguma escola, busca as informações do município
-        if (session('schoolsFound') > 0){
+        if (session('schoolsFound') >= 0){
             // Busca o objeto builder para exeutar a consulta no cache
             $cacheQuery =  $this->query['city']['cache'];
             

@@ -34,16 +34,22 @@ class Course extends Branch {
 				if ($course) {
 					$courseName = $course['NOME'];
 					
-					$SchoolsId = Matricula::distinct('CO_ENTIDADE')
-						->where('CO_CURSO_EDUC_PROFISSIONAL', $course['CO_CURSO_EDUC_PROFISSIONAL'] )
-						->where ('CO_MUNICIPIO', $cityId)
-						->get(['CO_ENTIDADE'])
-						->toArray();
+					$schoolsId = Matricula::distinct('CO_ENTIDADE')
+						->where('CO_CURSO_EDUC_PROFISSIONAL', $course['CO_CURSO_EDUC_PROFISSIONAL'] );
+
+					if ($cityId == null){
+						$schoolsId = $schoolsId->where('CO_UF', session('CO_UF'));
+					} else{
+						$schoolsId = $schoolsId->where('CO_MUNICIPIO', $cityId);
+					}
+					
+						
+					$schoolsId = $schoolsId->get(['CO_ENTIDADE'])->toArray();
 
 					// Realiza a consulta passando como parametro o resultado da consulta anterior
 					$tree->setQuery(
 						DB::table('escolas')
-							->whereIn('CO_ENTIDADE', array_values($SchoolsId))
+							->whereIn('CO_ENTIDADE', array_values($schoolsId))
 							->orderBy('NO_ENTIDADE', 'ASC')
 					);
 					$tree->answer->setResponseTable(Answer::SCHOOL);

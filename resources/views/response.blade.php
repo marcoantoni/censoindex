@@ -67,6 +67,7 @@
       var labelData = [];
       var labels = [];
       var data = [];
+      var msg = 'Alunos ';
     </script>
     @if ($responseType == Answer::LIST)
       {{-- Visualização em lista. Testa se resposta é relacionada a escola --}}
@@ -99,7 +100,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>{{ (session('NO_ENTIDADE')) ? "Cursos em " . session('NO_ENTIDADE') . " na cidade de " . session('NOME_MUNICIPIO') : "Cursos na cidade de " .session('NOME_MUNICIPIO') }}</th>
+              <th>{{ (session('NO_ENTIDADE')) ? "Cursos em " . session('NO_ENTIDADE') . " na cidade de " . session('NOME_MUNICIPIO') : "Cursos na cidade de " .session('NOME_MUNICIPIO') }}/session('NO_UF') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -113,21 +114,21 @@
       @endif
     {{-- Se a resposta não for em lista, ela pode ser do tipo NUMBERLIST, ou seja, retornou mais que um resultado para uma resposta numérica --}}
     {{-- Esse tipo de resposta só estará relacionada a tabela Matriculas --}}
-    @elseif ($responseType == Answer::NUMBERLIST)
-      
+    @elseif ($responseType == Answer::NUMBERLIST)   
       <table class="table table-striped">
         <thead>
           <tr>
             <th>Escola</th>
             <th>
               Quantidade de alunos 
-              @if (!session('messageTransport'))
-                {{ session('messageTransport') }}             
-              @endif
+              {{ session('messageTransport') ? session('messageTransport') : " " }}
+              {{ session('messagePhase') ? session('messagePhase') : " " }}
+              {{ session('courseName') ? "no técnico em " . session('courseName') : " " }}
             </th>
           </tr>
         </thead>
         <tbody>
+          <!-- Ao preencher a tabela, armazena os valores para criacao do grafico de estatisticas -->
           @foreach ($data as $key => $value)
             <tr>
               @php $count = $value[1]->count(); @endphp
@@ -135,7 +136,7 @@
               <td>{{ $count }}</td>
               <script type="text/javascript">
                 labels.push('{{ $value[0] }}');
-                labelData.push('dnfids');
+                labelData.push('{{ $value[0] }}');
                 data.push('{{ $count }}');
               </script>
             </tr>
@@ -144,13 +145,12 @@
       </table>
     {{-- Aqui a resposta é numérica e só contem uma entidade --}}
     @else
-      <p>      
+      <p>
+        @php $showGraph = false; @endphp
         @if (session('NO_ENTIDADE')) 
           {{ session('NO_ENTIDADE') }} na cidade de 
-          <script type="text/javascript">
-            labels.push('{{ session('NO_ENTIDADE') }}');
-            data.push({{ $data }});
-          </script>
+          <script type="text/javascript">msg += '{{ session("NO_ENTIDADE") }}';</script>
+           @php $showGraph = true; @endphp
         @endif
 
         @if (session('NOME_MUNICIPIO') == false) 
@@ -161,7 +161,7 @@
 
         tem
 
-        <b>{{ $data }}</b> 
+        <b>{{ $data }}<script type="text/javascript">data.push({{ $data }});</script></b> 
         @if ($responseTable == Answer::SCHOOL)
           escolas
         @elseif ($responseTable == Answer::STUDENT)
@@ -173,18 +173,79 @@
         {{-- Apresenta  a menssagem caso a pesquisa busque informações sobre transporte utilizado --}}
         @if (session('messageTransport'))
           {{ session('messageTransport') }}
+          <script type="text/javascript">msg += '{{ session("messageTransport") }}';</script>
+          @php $showGraph = true; @endphp
         @endif
 
         {{-- Apresenta a menssagem caso a pesquisa busque informações sobre o curso --}}
         @if (session('courseName'))
           no curso técnico em {{ session('courseName') }}
+          <script type="text/javascript">msg += '{{ session("courseName") }}';</script>
+          @php $showGraph = true; @endphp
         @endif
 
-        {{-- Apresenta a menssagem caso a pesquisa busque informações sobre o curso --}}
+        {{-- Apresenta a menssagem caso a pesquisa busque informações sobre a etapa de educação --}}
         @if (session('messagePhase'))
-          {{ session('messagePhase') }}
+        {{ session('messagePhase') }}
+          <script type="text/javascript">msg += '{{ session("messagePhase") }}';</script>
+          @php $showGraph = true; @endphp
         @endif
       </p>
+    @endif
+    <!-- gráfico de estatísticas só se aplica a alunos-->
+    @if ($responseTable == Answer::STUDENT && $showGraph)
+      <canvas id="chartCity" style="width=75px; height=75px;"></canvas>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+      <script>
+        var ctx = document.getElementById('chartCity');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: [
+                      'rgba(255, 99, 132, 0.2)',
+                      'rgba(54, 162, 235, 0.2)',
+                      'rgba(255, 193, 86, 0.2)',
+                      'rgba(75, 192, 192, 0.2)',
+                      'rgba(153, 102, 255, 0.2)',
+                      'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 193, 86, 1)',
+                      'rgba(75, 192, 192, 1)',
+                      'rgba(153, 102, 255, 1)',
+                      'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+        
+        /* https://www.chartjs.org/docs/latest/developers/updates.html */
+        function addData(chart, label, data) {
+          chart.data.labels.push(label);
+          chart.data.datasets.forEach((dataset) => {
+              dataset.data.push(data);
+          });
+          chart.update();
+        }
+ 
+        labels.push(msg);
+        console.log('msg: ' + msg);
+        
+
+        var url = '{{ url("/stats") }}'+'/'+{{ session("CO_UF") }} + '/' + {{ session("CO_MUNICIPIO") }};
+        console.log('url=' + url);
+        $.get(url, function( response ) {
+          console.log(data);
+          addData(myChart, 'Total de alunos em {{ session("NOME_MUNICIPIO") }}/{{ session("NO_UF") }}', response['city']);
+        });
+      </script>
     @endif
   @endif {{--inDomain--}}
   <!-- Modal debug-->
@@ -287,5 +348,5 @@
       $('#rightanswer').prop('disabled', true);
       $('#wronganswer').prop('disabled', true);
     }
-    </script>
+  </script>
 @endsection
