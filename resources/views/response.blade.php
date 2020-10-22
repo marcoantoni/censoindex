@@ -75,7 +75,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Escolas {{session('courseName') ? " que ofertam o curso técnico em " . session('courseName') : " "}}</th>
+              <th>Escolas {{session('courseName') ? "em " . session('NOME_MUNICIPIO') . "/" . session('NO_UF') . " que ofertam o curso técnico em " . session('courseName') : " "}}</th>
             </tr>
           </thead>
           <tbody>
@@ -100,7 +100,7 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>{{ (session('NO_ENTIDADE')) ? "Cursos em " . session('NO_ENTIDADE') . " na cidade de " . session('NOME_MUNICIPIO') : "Cursos na cidade de " .session('NOME_MUNICIPIO') }}/session('NO_UF') }}</th>
+              <th>{{ (session('NO_ENTIDADE')) ? "Cursos em " . session('NO_ENTIDADE') . " na cidade de " . session('NOME_MUNICIPIO') . "/" . session('NO_UF') : "Cursos na cidade de " .session('NOME_MUNICIPIO')."/".session('NO_UF') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -114,7 +114,8 @@
       @endif
     {{-- Se a resposta não for em lista, ela pode ser do tipo NUMBERLIST, ou seja, retornou mais que um resultado para uma resposta numérica --}}
     {{-- Esse tipo de resposta só estará relacionada a tabela Matriculas --}}
-    @elseif ($responseType == Answer::NUMBERLIST)   
+    @elseif ($responseType == Answer::NUMBERLIST)
+      @php $showGraph = true; @endphp 
       <table class="table table-striped">
         <thead>
           <tr>
@@ -173,23 +174,27 @@
         {{-- Apresenta  a menssagem caso a pesquisa busque informações sobre transporte utilizado --}}
         @if (session('messageTransport'))
           {{ session('messageTransport') }}
-          <script type="text/javascript">msg += '{{ session("messageTransport") }}';</script>
+          <script type="text/javascript">msg += ' - {{ session("messageTransport") }}';</script>
           @php $showGraph = true; @endphp
         @endif
 
         {{-- Apresenta a menssagem caso a pesquisa busque informações sobre o curso --}}
         @if (session('courseName'))
           no curso técnico em {{ session('courseName') }}
-          <script type="text/javascript">msg += '{{ session("courseName") }}';</script>
+          <script type="text/javascript">msg += ' - {{ session("courseName") }}';</script>
           @php $showGraph = true; @endphp
         @endif
 
         {{-- Apresenta a menssagem caso a pesquisa busque informações sobre a etapa de educação --}}
         @if (session('messagePhase'))
         {{ session('messagePhase') }}
-          <script type="text/javascript">msg += '{{ session("messagePhase") }}';</script>
+          <script type="text/javascript">msg += ' - {{ session("messagePhase") }}';</script>
           @php $showGraph = true; @endphp
         @endif
+        <script type="text/javascript">    
+          labels.push(msg);
+          console.log('msg: ' + msg);
+        </script>
       </p>
     @endif
     <!-- gráfico de estatísticas só se aplica a alunos-->
@@ -235,10 +240,6 @@
           chart.update();
         }
  
-        labels.push(msg);
-        console.log('msg: ' + msg);
-        
-
         var url = '{{ url("/stats") }}'+'/'+{{ session("CO_UF") }} + '/' + {{ session("CO_MUNICIPIO") }};
         console.log('url=' + url);
         $.get(url, function( response ) {
