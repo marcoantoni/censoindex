@@ -16,6 +16,7 @@ class Cursos extends Migration
             $table->integer('id');
             $table->integer('CO_CURSO_EDUC_PROFISSIONAL');
             $table->string('NOME', 100);
+            $table->string('ALIASNOME', 100);
             $table->string('EIXO', 100);
             $table->primary('id');
         });

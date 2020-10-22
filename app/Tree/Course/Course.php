@@ -29,7 +29,9 @@ class Course extends Branch {
 			// percorre todos os tokens buscando se ele é um curso
 			foreach ($tokens as $key => $token) {
 
-				$course = Curso::where('NOME', $tokens[$key])->first();
+				$course = Curso::where('NOME', $tokens[$key])
+					->orWhere('ALIASNOME', $tokens[$key])
+					->first();
 
 				if ($course) {
 					$courseName = $course['NOME'];
@@ -53,6 +55,7 @@ class Course extends Branch {
 							->orderBy('NO_ENTIDADE', 'ASC')
 					);
 					$tree->answer->setResponseTable(Answer::SCHOOL);
+					break;
 				}
 			}
 		// Lista os cursos ofertados em uma cidade/escola
