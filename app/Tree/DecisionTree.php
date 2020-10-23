@@ -131,7 +131,7 @@ class DecisionTree {
         ]);
 
         // Create a new Document, add text as content and set type to PLAIN_TEXT
-        $document = (new Document())->setContent($this->sentence)->setType(Type::PLAIN_TEXT);
+        $document = (new Document())->setContent($this->removeAccents($this->sentence))->setType(Type::PLAIN_TEXT);
 
         $features = (new Features())->setExtractEntities(true)->setExtractSyntax(true);
 
@@ -172,7 +172,7 @@ class DecisionTree {
             
             // so adiciona o token se ele nao for uma stopword
             if ($this->removeStopWords($token->getLemma())){
-                $this->tokens[] = $token->getLemma();
+                $this->tokens[] = strtolower($token->getLemma());
             }
         }
 
@@ -185,9 +185,9 @@ class DecisionTree {
     }
 
     public function setEntityies($entityies){
-      //  $this->entityies = array();
+        //  $this->entityies = array();
         $this->entityies = $entityies;
-       foreach ($entityies as $key => $value) {
+        foreach ($entityies as $key => $value) {
             print('<br>setEntidade: ' . $value->getName() );
         }
     }
@@ -252,6 +252,6 @@ class DecisionTree {
     }
 
     public function removeAccents($string) {
-        return strtolower(trim(preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', htmlentities($string, ENT_QUOTES, 'UTF-8')), ' '));
+        return trim(preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', htmlentities($string, ENT_QUOTES, 'UTF-8')), ' ');
     }
 }
