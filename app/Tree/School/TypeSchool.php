@@ -16,7 +16,6 @@ class TypeSchool extends Branch {
 
 	function handle(DecisionTree $tree, Closure $next): DecisionTree {
 		
-		$condition = '';
 		$hasToken = array_intersect($tree->getTokens(), ['publico', 'publicas', 'privado', 'particular']);
 
 		$tokens = $tree->getTokens();
@@ -24,44 +23,40 @@ class TypeSchool extends Branch {
 		$typeSchol = '';
 		$operator = '=';
 
-		if ($hasToken) {
-
-			foreach ($tokens as $token => $value) {
-				if (preg_match('/public/', $value)) {
-					$typeSchol = self::PUBLICSCHOOL;
-					break;
-				} elseif (preg_match('/privad|particular/', $value))  {
-					$typeSchol = self::PUBLICSCHOOL;
-					$operator = '<>';
-					break;
-				}
+		foreach ($tokens as $token => $value) {
+			if (preg_match('/public/i', $value)) {
+				$typeSchol = self::PUBLICSCHOOL;
+				break;
+			} elseif (preg_match('/privad|particular/i', $value))  {
+				$typeSchol = self::PUBLICSCHOOL;
+				$operator = '<>';
+				break;
 			}
+		}
 
-	        $tree->setQuery($tree->getQuery()->where('TP_CATEGORIA_ESCOLA_PRIVADA', $operator, $typeSchol));
-	    }
+		if ($typeSchol == 1 || $typeSchol != 1) {
+			$tree->setQuery($tree->getQuery()->where('TP_CATEGORIA_ESCOLA_PRIVADA', $operator, $typeSchol));
+		}
 
-	    // search for public schools:
-	    $hasToken = array_intersect($tree->getTokens(), ['municipal', 'municipio ', 'estadual', 'estado', 'federal']); 
-
-		if ($hasToken) {
-			$operator = '=';
-			foreach ($tokens as $token => $value) {
-				if (preg_match('/municip/', $value)) {
-					$typeSchol = 3;
-					break;
-				} elseif (preg_match('/estad/', $value)) {
-					$typeSchol = 2;
-					break;
-				} elseif (preg_match('/federal/', $value)) {
-					$typeSchol = 1;
-					break;
-				}
+		// search for public schools:
+		foreach ($tokens as $token => $value) {
+			if (preg_match('/municip/i', $value)) {
+				$typeSchol = 3;
+				break;
+			} elseif (preg_match('/estad/i', $value)) {
+				$typeSchol = 2;
+				break;
+			} elseif (preg_match('/federal/i', $value)) {
+				$typeSchol = 1;
+				break;
 			}
+		}
 
-	        $tree->setQuery($tree->getQuery()->where('TP_DEPENDENCIA', $typeSchol));
-	    }
+		if ($typeSchol >= 1 && $typeSchol <= 3){
+			$tree->setQuery($tree->getQuery()->where('TP_DEPENDENCIA', $typeSchol));
+		}
 
 		return $next($tree);
-	
+
 	}
 }
