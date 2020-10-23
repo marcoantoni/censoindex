@@ -44,9 +44,11 @@ class SearchController extends Controller {
     
     public function store(Request $request) {
         /* Grava as perguntas no BD */;
-        //$log = new Log();
-        //$log->sentence = $request->input('search');
-        //$log->save();
+        $log = new Log();
+        $log->sentence = $request->input('search');
+        $log->feedback = '';
+        $log->correct = 2;
+        $log->save();
         
         $sentence = $this->speelCheck($request->input('search'));
         // inicia o processamento
