@@ -20,50 +20,66 @@ class Phases extends Branch {
 		$values = false;
 		$schoolsFound = session('schoolsFound');
 
-		if (preg_match('/cre(ch|x)e/', $tree->sentence)) {		
-			$values = [1];
-			$messagePhase = "nas creches";
-		}
+		$tokens = $tree->getTokens();
 
-		if (preg_match('/pr(e|é)( |-)escola/', $tree->sentence)) {		
-			$values = [2];
-			$messagePhase = "nas pré-escolas";
-		}
-
-		// pesquisas relacionadas ao EJA fundamental
-		if (preg_match('/eja/', $tree->sentence)) {
-			if (preg_match('/fundamental/', $tree->sentence)) {		
-				$values = [69, 70, 72];
-				$messagePhase = "no EJA - Ensino Fundamental";
-			} else if (preg_match('/m(e|é)dio/', $tree->sentence)) {		
-			// pesquisa por EJA médio
-				$values = [71, 74];
-				$messagePhase = "no EJA - Ensino Médio";
-			} else {		
-				$values = [69, 70, 71, 72, 73, 74];
-				$messagePhase = "no EJA - Ensino Fundamental e Médio";
+		foreach ($tokens as $key => $token) { 
+			
+			if (preg_match('/creche/i', $token)) {		
+				$values = [1];
+				$messagePhase = "nas creches";
+				unset($tokens[$key]);
+				break;
 			}
-		} else {
 
+			if (preg_match('/pr(e|é)( |-)escola/i', $tree->sentence)) {		
+				$values = [2];
+				$messagePhase = "nas pré-escolas";
+				
+				$position = array_search('pre', $tokens);
+				if ($position) unset($tokens[$position]);
+				
+				$position = array_search('escola', $tokens);
+				if ($position) unset($tokens[$position]);	
+				break;		
+			}
+
+			if (preg_match('/infantil/i', $token)) {		
+				$values = [1, 2];
+				$messagePhase = "na educação infantil";
+				unset($tokens[$key]);
+				break;
+			}
+			
 			// Fundamental e Médio vem precedido de "ensino"
 			// Procura os dois termos depois que encontrar "ensino"
-			
-			$tokens = $tree->getTokens();
 			$position = array_search('ensino', $tokens);
 
 			if ($position) {
+				unset($tokens[$position]);
 				for ($i = $position+1; $i < count($tokens); $i++) {
-					
-				 	if (preg_match('/fundamental/', $tokens[$i])) {		
-						// códigos entre 4 e 21 correspondem ao ensino fundamental
-						// código 41 corresponde ao 9º ano do novo ensino fundamental
-						$values = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 41];
-						$messagePhase = "no ensino Fundamental";
+				 	if (preg_match('/fundamental/i', $tokens[$i])) {		
+						if (preg_match('/eja/i', $tree->sentence)) {
+							$values = [69, 70, 72];
+							$messagePhase = "no EJA - ensino Fundamental";
+						}  else {
+							// códigos entre 4 e 21 correspondem ao ensino fundamental
+							// código 41 corresponde ao 9º ano do novo ensino fundamental
+							$values = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 41];
+							$messagePhase = "no ensino Fundamental";
+							unset($tokens[$i]);
+						}
 						break;
-					} else if (preg_match('/m(e|é)dio/', $tokens[$i])) {		
-						// códigos entre 25 e 28 correspondem ao ensino médio - regular e integrado
-						$values = [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 64, 71, 74];
-						$messagePhase = "no ensino Médio";
+					} else if (preg_match('/medio/i', $tokens[$i])) {
+						if (preg_match('/eja/i', $tree->sentence)) {
+							// pesquisa por EJA médio
+							$values = [71, 74];
+							$messagePhase = "no EJA - ensino Médio";
+						} else {
+							// códigos entre 25 e 28 correspondem ao ensino médio - regular e integrado
+							$values = [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 64, 71, 74];
+							$messagePhase = "no ensino Médio";
+							unset($tokens[$i]);
+						}
 						break;
 					} 
 				}
@@ -82,6 +98,13 @@ class Phases extends Branch {
 				}
 			}
 			session(['messagePhase' => $messagePhase ]);
+		}
+
+		$tree->tokens = [];
+
+		foreach ($tokens as $token) {
+			if ($token)
+				$tree->tokens[] = $token;
 		}
 
 		return $next($tree);

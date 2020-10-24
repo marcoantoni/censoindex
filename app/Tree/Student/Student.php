@@ -8,7 +8,6 @@ use App\Tree\Answer;
 use App\Tree\Branch;
 use App\Tree\DecisionTree;
 use Closure;
-use Google\Cloud\Language\V1\Entity\Type as EntityType;
 use Illuminate\Pipeline\Pipeline;
 
 class Student extends Branch {
@@ -28,6 +27,7 @@ class Student extends Branch {
             ->through([
                 School::class,
                 Phases::class,
+                Year::class,
                 TransportType::class,
                 Course::class,
             ])->thenReturn();                

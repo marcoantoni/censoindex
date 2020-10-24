@@ -30,7 +30,7 @@ class TransportType extends Branch {
 	        $messageTransport = 'que usam bicicleta';
 		}
 
-		if (preg_match('/onibus/', $tree->sentence)){
+		if (preg_match('/(o|ô)nibus/', $tree->sentence)){
 	        $match = true;
 	        $field = 'IN_TRANSP_ONIBUS';
 	        $messageTransport = 'que usam ônibus';
