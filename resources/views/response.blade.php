@@ -185,6 +185,12 @@
           @php $showGraph = true; @endphp
         @endif
 
+        {{-- Apresenta a menssagem do ano em que o aluno está cursando --}}
+        @if (session('messageYear'))
+        {{ session('messageYear') }}
+          <script type="text/javascript">msg += ' - {{ session("messageYear") }}';</script>
+          @php $showGraph = true; @endphp
+        @endif
         {{-- Apresenta a menssagem caso a pesquisa busque informações sobre a etapa de educação --}}
         @if (session('messagePhase'))
         {{ session('messagePhase') }}

@@ -88,7 +88,7 @@ class Year extends Branch {
 						$messageYear = ' no 3º ano';
 						break;
 					case 4:
-						$values = [27, 33, 38];
+						$values = [33, 38];
 						$messageYear = ' no 4º ano';
 						break;
         		}

@@ -32,7 +32,7 @@ class DecisionTree {
     private $entityies;
     private $query;
     public $sentence;
-    private $tokens;
+    public $tokens;
 
     public $answer;
 
@@ -196,6 +196,10 @@ class DecisionTree {
         return $this->tokens;
     }
 
+    public function setTokens($tokens){
+        $this->tokens = $tokens;
+    }
+
     // adiciona uma condição  a clausula where
     public function addCondition(array $condition){
         $this->conditions[] = $condition;
@@ -215,7 +219,7 @@ class DecisionTree {
     *
     */
     public function removeStopWords(String $word){
-        $stopwords = array('a', 'o', 'as', 'os', 'de', 'que', 'do', 'em', 'para', 'é', 'dos', 'no', 'na');
+        $stopwords = array('a', 'o', 'as', 'os', 'de', 'que', 'do', 'em', 'para', 'é', 'dos', 'no', 'na', 'ter');
         
         if (array_search($word, $stopwords))
             return false;
@@ -241,6 +245,7 @@ class DecisionTree {
         session(['CO_ENTIDADE' => false]);
         session(['NO_ENTIDADE' => false]);
         session(['schoolsFound' => 0]);
+        session(['messageYear' => false]);
         /* A variavel courseName pode assumir 3 valores
          * false é o valor padrão
          * null quando o processamento for para a classe App\Tree\Course\Course 
