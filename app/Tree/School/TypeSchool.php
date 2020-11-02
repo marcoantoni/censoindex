@@ -7,53 +7,48 @@ use App\Tree\DecisionTree;
 use Closure;
 
 class TypeSchool extends Branch {
-	
-	const PUBLICSCHOOL = 0; 
-	const PRIVATECSCHOOL = 1; 
-	const COMUNITARYSCHOOL = 2; 
-	const CONFESSIONALSCHOOL = 3; 
-	const PHILANTHROPICSCHOOL = 4;
-
+    /*  
+     * O campo TP_DEPENDENCIA indica a esfera administrativa da escola.
+     * 1 - Federal
+     * 2 - Estadual
+     * 3 - Municipal
+     * 4 - Privada
+    */
 	function handle(DecisionTree $tree, Closure $next): DecisionTree {
 		
-		$hasToken = array_intersect($tree->getTokens(), ['publico', 'publicas', 'privado', 'particular']);
-
 		$tokens = $tree->getTokens();
-		$value = '';
-		$typeSchol = '';
-		$operator = '=';
-
-		foreach ($tokens as $token => $value) {
-			if (preg_match('/public/i', $value)) {
-				$typeSchol = self::PUBLICSCHOOL;
-				break;
-			} elseif (preg_match('/privad|particular/i', $value))  {
-				$typeSchol = self::PUBLICSCHOOL;
-				$operator = '<>';
-				break;
-			}
-		}
-
-		if ($typeSchol == 1 || $typeSchol != 1) {
-			$tree->setQuery($tree->getQuery()->where('TP_CATEGORIA_ESCOLA_PRIVADA', $operator, $typeSchol));
-		}
-
-		// search for public schools:
+		$value = 0;
+		$publicSchool = false;
+		
 		foreach ($tokens as $token => $value) {
 			if (preg_match('/municip/i', $value)) {
-				$typeSchol = 3;
+				$value = 3;
 				break;
 			} elseif (preg_match('/estad/i', $value)) {
-				$typeSchol = 2;
+				$value = 2;
 				break;
 			} elseif (preg_match('/federal/i', $value)) {
-				$typeSchol = 1;
+				$value = 1;
+				break;
+			}
+			elseif (preg_match('/privad|particular/i', $value)) {
+				$value = 4;
+				break;
+			} elseif (preg_match('/public/i', $value)) {
+				$publicSchool = true;
 				break;
 			}
 		}
 
-		if ($typeSchol >= 1 && $typeSchol <= 3){
-			$tree->setQuery($tree->getQuery()->where('TP_DEPENDENCIA', $typeSchol));
+		// aplica a restrição só de escolas funcionando normalmente - 1 em funcionamento
+		$tree->setQuery($tree->getQuery()->where('TP_SITUACAO_FUNCIONAMENTO', 1));
+
+		if ($value > 0){
+			$tree->setQuery($tree->getQuery()->where('TP_DEPENDENCIA', $value));
+		} else if ($publicSchool){
+			$tree->setQuery(
+				$tree->getQuery()->whereIn('TP_DEPENDENCIA', [1, 2, 3])
+			);
 		}
 
 		return $next($tree);
