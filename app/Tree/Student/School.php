@@ -32,7 +32,7 @@ class School extends Branch {
 				 * Ignora as palavras creche, infantil, ensino, fundamental, médio pois nesse aplicação, ao pesquisar escolas,
 				 * pode-se considerar essas palavras como stop words.
 				*/
-				if ((strcasecmp(session('NOME_MUNICIPIO'), $entityName) != 0) && 
+				if ((strcasecmp($tree->removeAccents(session('NOME_MUNICIPIO')), $entityName) != 0) && 
 					(strcasecmp(session('NO_UF'), $entityName) != 0) && 
 					(strcasecmp('creche', $entityName) != 0) && 
 					(strcasecmp('escola', $entityName) != 0) && 
