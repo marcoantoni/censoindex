@@ -34,43 +34,42 @@ class Year extends Branch {
         	if (strcmp($messagePhase, "no ensino Fundamental") == 0){
         		switch($year){
 					case 1:
-						$values = 14;
+						$values = [14];
 						$messageYear = ' no 1º ano';
 						break;
 					case 2:
-						$values = 15;
+						$values = [15];
 						$messageYear = ' no 2º ano';
 						break;
 					case 3:
-						$values = 16;
+						$values = [16];
 						$messageYear = ' no 3º ano';
 						break;
 					case 4:
-						$values = 17;
+						$values = [17];
 						$messageYear = ' no 4º ano';
 						break;
 					case 5:
-						$values = 18;
+						$values = [18];
 						$messageYear = ' no 5º ano';
 						break;
 					case 6:
-						$values = 19;
+						$values = [19];
 						$messageYear = ' no 6º ano';
 						break;
 					case 7:
-						$values = 20;
+						$values = [20];
 						$messageYear = ' no 7º ano';
 						break;
 					case 8:
-						$values = 21;
+						$values = [21];
 						$messageYear = ' no 8º ano';
 						break;
 					case 9:
-						$values = 41;
+						$values = [41];
 						$messageYear = ' no 9º ano';
 						break;
         		}
-        		$tree->setQuery($tree->getQuery()->where('TP_ETAPA_ENSINO', $values));
         	} else if (strcmp($messagePhase, "no ensino Médio") == 0){
 
         		$values = [];
@@ -92,7 +91,6 @@ class Year extends Branch {
 						$messageYear = ' no 4º ano';
 						break;
         		}
-        		$tree->setQuery($tree->getQuery()->whereIn('TP_ETAPA_ENSINO', $values)); 
         	}
         }
 
