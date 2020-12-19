@@ -19,8 +19,8 @@ class Escolas extends Migration
             $table->char('NO_ENTIDADE', 100);
             $table->char('CO_ORGAO_REGIONAL', 5);
             $table->integer('TP_SITUACAO_FUNCIONAMENTO');
-            $table->date('DT_ANO_LETIVO_INICIO');
-            $table->date('DT_ANO_LETIVO_TERMINO');
+            $table->char('DT_ANO_LETIVO_INICIO', 45);
+            $table->char('DT_ANO_LETIVO_TERMINO', 45);
             $table->integer('CO_REGIAO');
             $table->integer('CO_MESORREGIAO');
             $table->integer('CO_MICRORREGIAO');
@@ -92,7 +92,8 @@ class Escolas extends Migration
             $table->integer('IN_BANHEIRO_CHUVEIRO');
             $table->integer('IN_BIBLIOTECA');
             $table->integer('IN_BIBLIOTECA_SALA_LEITURA');
-            $table->integer('IN_COZINHAIN_DESPENSA');
+            $table->integer('IN_COZINHA');
+            $table->integer('IN_DESPENSA');
             $table->integer('IN_DORMITORIO_ALUNO');
             $table->integer('IN_DORMITORIO_PROFESSOR');
             $table->integer('IN_LABORATORIO_CIENCIAS');
