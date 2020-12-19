@@ -139,9 +139,9 @@
             </button>
           </div>
           <div class="modal-body">
-            Faça perguntas como se fossem dirigidas a outra pessoa. No momento, consigo responder essas perguntas :) <br>
-            <br><a href="#">Quais escolas federais tem em Santa Maria/RS</a> - consigo aplicar restrições de escolas particulares e públicas (municipais, estaduais e federais)
-            <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quais escolas particulares existem em Frederico Westphalen/RS</a>
+            Faça perguntas como se fossem dirigidas a outra pessoa. No momento, consigo responder perguntas nos seguintes formatos :) <br>
+            <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">Quais escolas federais tem em Santa Maria/RS</a> - consigo aplicar restrições de escolas particulares e públicas (municipais, estaduais e federais)
+            <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">Quais escolas ofertam ensino médio em Santa Maria/RS</a> - consigo aplicar restrições para ensino fundamental (anos iniciais e finais), ensino médio integrado, profissionalizante ou comum, creches, pré-escolas e escolas com Atendimento Educacional Especializado (AEE)
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem na cidade de Rolante/RS</a>
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem na escola visconde de cairu em Santa Rosa/RS</a>
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem em Rolante/RS que usam transporte público</a>
@@ -149,6 +149,7 @@
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quais cursos tem na cidade de Taquara/RS</a>
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">onde tem o curso técnico em informática em Porto Alegre</a>
             <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem na pré-escola em Santa Rosa/RS</a> - consigo aplicar restrições de (pré-escola, creches, ensino fundamental/médio, EJA fundamental/médio)
+            <br><a href="#" class="questionHelp" onclick="javascript: setQuestion(this);">quantos alunos tem na em Santa Rosa/RS na escola dom bosco no 9 ano do ensino fundamental</a> - consigo aplicar restrições para todos os anos do ensino fundamental e médio)
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
