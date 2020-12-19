@@ -61,7 +61,7 @@ class DecisionTree {
         // Percorre os tokens para maperar em qual tabela a pergunta está se relacionando
         foreach ($this->tokens as $key => $token) {
             
-            if (preg_match('/alun|estudante|matricula/', $token)) {
+            if (preg_match('/alun|estudante|matricula/i', $token)) {
                 app(Pipeline::class)
                     ->send($this)
                     ->through([
@@ -69,14 +69,14 @@ class DecisionTree {
                     ])->thenReturn();
                     session(['inDomain' => true]);
                     break;
-            } else  if (preg_match('/escola|instituto|colegio/', $token)){
+            } else  if (preg_match('/escola|instituto|colegio|creche/i', $token)){
                 app(Pipeline::class)
                     ->send($this)
                     ->through([School::class])
                     ->thenReturn();
                     session(['inDomain' => true]);
                     break;
-            } else  if (preg_match('/curso/', $token)){
+            } else  if (preg_match('/curso/i', $token)){
                 app(Pipeline::class)
                     ->send($this)
                     ->through([Course::class])
@@ -109,10 +109,11 @@ class DecisionTree {
                 $this->answer->setResponseType(Answer::NUMBERLIST);
             } else {
                 $this->answer->data = $this->query->count();
-            }
-
+            };
         } else {
             $this->answer->data = $this->query->get();
+            // debug query
+            //print($this->query->toSql());
             $this->answer->generateMessages(count($this->answer->data));
         }
         return $this->answer;
@@ -254,6 +255,7 @@ class DecisionTree {
         session(['courseName' => false ]);
         session(['messageTransport' => false ]);
         session(['messagePhase' => false ]);
+        session(['messageSchool' => false ]);
     }
 
     public function removeAccents($string) {
