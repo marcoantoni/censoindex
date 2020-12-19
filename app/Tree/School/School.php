@@ -18,6 +18,7 @@ class School extends Branch {
             ->send($tree)
             ->through([
                 TypeSchool::class,
+                OfferByModality::class,
                 Order::class
             ])->thenReturn();
    }

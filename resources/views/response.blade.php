@@ -75,7 +75,10 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Escolas {{session('courseName') ? "em " . session('NOME_MUNICIPIO') . "/" . session('NO_UF') . " que ofertam o curso técnico em " . session('courseName') : " "}}</th>
+              <th> 
+                {{session('courseName') ? "Escolas em " . session('NOME_MUNICIPIO') . "/" . session('NO_UF') . " que ofertam o curso técnico em " . session('courseName') : " "}}
+                {{session('messageSchool') ? session('messageSchool') . " em " . session('NOME_MUNICIPIO') . "/" . session('NO_UF') : " "}}
+              </th>
             </tr>
           </thead>
           <tbody>
