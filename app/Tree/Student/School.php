@@ -36,10 +36,13 @@ class School extends Branch {
 					(strcasecmp(session('NO_UF'), $entityName) != 0) && 
 					(strcasecmp('creche', $entityName) != 0) && 
 					(strcasecmp('escola', $entityName) != 0) && 
+					(strcasecmp('colegio', $entityName) != 0) && 
 					(strcasecmp('ensino', $entityName) != 0) && 
 					(strcasecmp('educacao infantil', $entityName) != 0) && 
 					(strcasecmp('ensino fundamental', $entityName) != 0) && 
 					(strcasecmp('ensino medio', $entityName) != 0) && 
+					(strcasecmp('estadual', $entityName) != 0) && 
+					(strcasecmp('municipal', $entityName) != 0) && 
 					(strcasecmp('fundamental', $entityName) != 0) &&
 					(strcasecmp('infantil', $entityName) != 0) ){
 
