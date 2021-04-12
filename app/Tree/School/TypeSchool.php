@@ -31,6 +31,7 @@ class TypeSchool extends Branch {
 				$message = "estaduais";
 				break;
 			} elseif (preg_match('/federal/i', $value)) {
+				$message = "federais";
 				$value = 1;
 				break;
 			}
@@ -61,9 +62,7 @@ class TypeSchool extends Branch {
 		 * substituir a palavra.
 		*/
 		if ($message)	
-			session(['messageSchool' => "Escolas $message" ]);
-		else
-			session(['messageSchool' => "Escolas" ]);
+			session(['messageSchool' => "$message" ]);
 		
 		return $next($tree);
 
