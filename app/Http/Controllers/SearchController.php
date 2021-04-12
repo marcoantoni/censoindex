@@ -50,17 +50,20 @@ class SearchController extends Controller {
         $log->correct = 2;
         $log->save();
         
-        $sentence = $this->speelCheck($request->input('search'));
+        $sentence = $request->input('search');
+        //$sentence = $request->input('search');
         // inicia o processamento
         $decision_tree = new DecisionTree($sentence);
         $analyse = $decision_tree->analyze();
         
         $answer = $decision_tree->process();
-        
+
+
         return view ('response')->with([
             'data'   => $answer->data,
             'sentence'  => $decision_tree->sentence,
             'debug'     => $analyse,
+            'debugSql'  => $decision_tree->sql,
             'responseType' => $answer->getResponseType(),
             'responseTable' => $answer->getResponseTable(),
             'stats' => $answer->statistics->stats,
@@ -69,7 +72,7 @@ class SearchController extends Controller {
     }
 
     public function speelCheck($input){
-        $host = 'https://speelcheckdissertacao.cognitiveservices.azure.com';
+        $host = 'https://censoindex.cognitiveservices.azure.com';
         $path = '/bing/v7.0/spellcheck?';
         $params = 'mkt=pt-BR&mode=proof';
 
@@ -77,7 +80,7 @@ class SearchController extends Controller {
             'text' => urlencode ($input)
         );
 
-        $key = '8d5decd4544f4315a1e77c0fe78e6427';
+        $key = 'c7cf407ab582432db223a0ca80b12631';
 
         $headers = "Content-type: application/x-www-form-urlencoded\r\n" .
             "Ocp-Apim-Subscription-Key: $key\r\n";

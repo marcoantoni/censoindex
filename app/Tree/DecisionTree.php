@@ -33,6 +33,7 @@ class DecisionTree {
     private $query;
     public $sentence;
     public $tokens;
+    public $sql;
 
     public $answer;
 
@@ -112,8 +113,9 @@ class DecisionTree {
             };
         } else {
             $this->answer->data = $this->query->get();
-            // debug query
-            //print($this->query->toSql());
+            // debug query              
+            $this->sql = $this->debugQuery($this->query);
+
             $this->answer->generateMessages(count($this->answer->data));
         }
         return $this->answer;
@@ -260,5 +262,11 @@ class DecisionTree {
 
     public function removeAccents($string) {
         return trim(preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', htmlentities($string, ENT_QUOTES, 'UTF-8')), ' ');
+    }
+
+    // https://stackoverflow.com/questions/27314506/laravel-how-to-get-query-with-bindings
+    public function debugQuery($builder) {
+        $addSlashes = str_replace('?', "'?'", $builder->toSql());
+        return vsprintf(str_replace('?', '%s', $addSlashes), $builder->getBindings());
     }
 }

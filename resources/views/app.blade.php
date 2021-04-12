@@ -71,7 +71,8 @@
       </nav>
       @if (isset($debug))
         <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#modalDebug">Debug NLP</a>&nbsp;&nbsp;
-        <a class="btn btn-outline-danger" href="https://docs.google.com/forms/d/e/1FAIpQLSfUqTz7Wal2NcT0L2hqxir1QomaFKX1cPUzoclZzYvG5tbBgA/viewform?usp=sf_link">Sugestões</a>
+        <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#modalDebugSql">Ver SQL</a>&nbsp;&nbsp;
+        <a class="btn btn-outline-danger" href="https://forms.gle/DyxW7uNWHvnn7Tmv7">Pesquisa</a>
       @endif
     </div>
     <div class="container">
